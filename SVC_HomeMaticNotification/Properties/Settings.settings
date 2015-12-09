@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SVC_HomeMaticNotification.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NotifierConfigFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ConfigTemplate.xml</Value>
+    </Setting>
+    <Setting Name="HmcUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://homematicCCU2.halnet.selfip.org</Value>
+    </Setting>
+    <Setting Name="NotifierReconnectTimerSec" Type="System.String" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="ServiceEventSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="NotifierQueryTimerSec" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="NotifierQueryFullRequestSec" Type="System.String" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

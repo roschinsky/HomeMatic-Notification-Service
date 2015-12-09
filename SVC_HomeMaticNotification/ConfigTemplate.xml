@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Configuration file for "HomeMatic Notification Service" -->
+<config>
+  <configHMNotifier pushMessageTitle="HMC" pushMessageUrlToWebUi="http://yourHomematic.local/">
+    <notifyGroups>
+      <notifyGroup Id="1" Name="HomeMatic-Notifier for Tyler" Owner="T. Durden" >
+        <pushalotApiKey>4c246115ca8848a8a87d63b0f9885a96</pushalotApiKey>
+        <notifyItems>
+          <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
+          <notifyItem Scope="Raum 1" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+          <notifyItem Scope="Raum 2" Name="Tür" DeviceAddress="LEQ1468091" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
+            <conditions>
+              <devCondition DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+          <notifyItem Scope="Raum 2" Name="Tester" DeviceAddress="LEQ1468026" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+          <notifyItem Scope="Raum 3" Name="Test-Switch Ch1" DeviceAddress="LEQ0252664" DeviceChannel="1" ValueKey="PRESS_LONG" IsImportant="false" />
+          <notifyItem Scope="Raum 3" Name="Test-Switch Ch2" DeviceAddress="LEQ0252664" DeviceChannel="2" ValueKey="PRESS_LONG" IsImportant="false" />
+          <notifyItem Scope="Raum 3" Name="Test-Sensor" DeviceAddress="LEQ0758115" DeviceChannel="1" ValueKey="STATE" IsImportant="false" >
+            <silenceTimes>
+              <silence Day="Saturday" Start="09:00" End="20:00" />
+              <silence Day="Sunday" Start="09:00" End="20:00" />
+            </silenceTimes>
+          </notifyItem>
+        </notifyItems>
+      </notifyGroup>
+      <!--
+      <notifyGroup Id="2" Name="Jeffrey is watching you" Owner="J. Goines" >
+        <pushoverApiKey>8293a7e38c4e9832e7983249832fe82a</pushalotApiKey>
+        <notifyItems>
+          <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
+          <notifyItem Scope="Raum 3" Name="Test-Sensor" DeviceAddress="LEQ0758115" DeviceChannel="1" ValueKey="STATE" IsImportant="false" >
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+        </notifyItems>
+      </notifyGroup>
+      -->
+    </notifyGroups>
+  </configHMNotifier>
+</config>
