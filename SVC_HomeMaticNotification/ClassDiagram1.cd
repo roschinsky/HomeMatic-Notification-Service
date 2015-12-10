@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNException" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HMNException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNotification">
+    <Position X="8.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAACABAAAACQEAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HMNotification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNotifier" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CCAAACAEoCQgYAhACAFAAAAgJAAQAEAAEAACgAQgABA=</HashCode>
+      <FileName>HMNotifier.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNotifyCondition">
+    <Position X="6.5" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="TRoschinsky.Service.HomeMaticNotification.HMNotifyCondition.ConditionType">
+        <TypeIdentifier>
+          <NewMemberFileName>HMNotifyCondition.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEYAAAAAAAAIAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>HMNotifyCondition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNotifyDestination">
+    <Position X="2.5" Y="0.5" Width="1.75" />
+    <NestedTypes>
+      <Enum Name="TRoschinsky.Service.HomeMaticNotification.HMNotifyDestination.PushProviderType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>HMNotifyDestination.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAACAACAAAAAAAAEAAAAgAQAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HMNotifyDestination.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNotifyItem">
+    <Position X="4.5" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ABAACAAAAAQAUCREYFBAAsQEAgIAAAAAAAAIAAgAAEA=</HashCode>
+      <FileName>HMNotifyItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.HMNotifySilence">
+    <Position X="6.5" Y="3.75" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAFAAAIAAACAAAAAAAAAAAACAAgAAA=</HashCode>
+      <FileName>HMNotifySilence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.Notification" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAQQAgAAAKBAEACAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Notification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.NotificationPushalot">
+    <Position X="10.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAQAAAEAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>NotificationPushalot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TRoschinsky.Service.HomeMaticNotification.NotificationPushover">
+    <Position X="8.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQCAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NotificationPushover.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVC_HomeMaticNotification.ProjectInstaller" Collapsed="true">
+    <Position X="2.5" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>gCAAAAAAACAAAAAAAACAAAACAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>ProjectInstaller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SVC_HomeMaticNotification.ServiceHMN" Collapsed="true">
+    <Position X="2.5" Y="4.25" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAiAACABAAAAEACAAAAGAAQAAEAACEAAABAAAIA=</HashCode>
+      <FileName>ServiceHMN.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
