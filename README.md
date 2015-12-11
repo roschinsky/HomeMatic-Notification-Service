@@ -9,7 +9,7 @@ _(About the libraries and APIs: The XML-API Addon (http://www.homematic-inside.d
 ### SVC_HomeMaticNotification
 
 The service itself. Using the *HMNotifier* you can connect to a HomeMatic CCU and trigger the test for status changes within the monitored devices by calling the _CollectEvents()_ method. 
-The class *HMNotifyItem* is object representation of the configuration file: the definition of devices to monitor and its properties. A *HMNotification* object is event monitored, that can generate a new push message, captured by the _CollectEvents()_ method.
+The class *HMNotifyItem* is the object representation of an item from the configuration file. That means the definition of a device to monitor and all its properties. A *HMNotification* object is a captured event, that can generate a new push message, detected by the _CollectEvents()_ method.
 
 ![Class diagramm](https://troschinsky.files.wordpress.com/2015/12/homematicnotification_svc.png?w=600)
 
