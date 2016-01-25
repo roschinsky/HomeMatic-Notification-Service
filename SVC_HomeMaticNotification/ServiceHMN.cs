@@ -97,9 +97,21 @@ namespace SVC_HomeMaticNotification
             {
                 Exception[] errors = null;
 
-                notifier = new HMNotifier(String.Format("{0}", Properties.Settings.Default.HmcUrl.TrimEnd('/')), 
-                    Properties.Settings.Default.NotifierQueryFullRequestSec, 
-                    Properties.Settings.Default.NotifierConfigFile);
+                HMNotifierConfig config = new HMNotifierConfig() {
+                    HmcUrl = String.Format("{0}", Properties.Settings.Default.HmcUrl.TrimEnd('/')),
+                    NotifierQueryFullRequestSec = Properties.Settings.Default.NotifierQueryFullRequestSec,
+                    NotifierConfigFile = Properties.Settings.Default.NotifierConfigFile, 
+                    NotificationSmtpHost = Properties.Settings.Default.NotificationSmtpHost,
+                    NotificationSmtpPort = Properties.Settings.Default.NotificationSmtpPort,
+                    NotificationSmtpCredUser = Properties.Settings.Default.NotificationSmtpCredUser,
+                    NotificationSmtpCredPw = Properties.Settings.Default.NotificationSmtpCredPw,
+                    NotificationSmtpMailFrom = Properties.Settings.Default.NotificationSmtpMailFrom
+                };
+
+                notifier = new HMNotifier(config);
+                //notifier = new HMNotifier(String.Format("{0}", Properties.Settings.Default.HmcUrl.TrimEnd('/')), 
+                //    Properties.Settings.Default.NotifierQueryFullRequestSec, 
+                //    Properties.Settings.Default.NotifierConfigFile);
                 Thread.Sleep(5000);
 
                 if (notifier != null && notifier.IsConnected)

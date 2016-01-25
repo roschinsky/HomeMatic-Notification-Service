@@ -129,7 +129,18 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 {
                     // "Start" - initialize a new notifier with given URL and starts timer execution
                     lastQueryTime = DateTime.Now;
-                    notifier = new HMNotifier(txtUrl.Text, "10", Properties.Settings.Default.NotifierConfigFile);
+                    //notifier = new HMNotifier(txtUrl.Text, "10", Properties.Settings.Default.NotifierConfigFile);
+
+                    HMNotifierConfig config = new HMNotifierConfig()
+                    {
+                        HmcUrl = txtUrl.Text,
+                        NotifierQueryFullRequestSec = "10",
+                        NotifierConfigFile = Properties.Settings.Default.NotifierConfigFile,
+                        NotificationSmtpHost = "mxr",
+                        NotificationSmtpPort = "25",
+                        NotificationSmtpMailFrom = "no-reply@halnet.selfip.org"
+                    };
+
                     if (notifier != null && notifier.IsConnected)
                     {
                         timer.Start();

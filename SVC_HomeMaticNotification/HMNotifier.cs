@@ -22,6 +22,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
         private string pushSource = String.Empty;
         private string pushTitle = "HMC";
         private string configFileName = String.Empty;
+        private Tuple<string, string, string, string, string> mailConfig;
 
         private HMApiWrapper hmWrapper;
         private BackgroundWorker bgwGetEvents;
@@ -84,6 +85,17 @@ namespace TRoschinsky.Service.HomeMaticNotification
             {
                 Dispose();
             }
+        }
+
+        public HMNotifier(HMNotifierConfig config) 
+            : this(config.HmcUrl, config.NotifierQueryFullRequestSec, config.NotifierConfigFile)
+        {
+            mailConfig = new Tuple<string, string, string, string, string>(
+                config.NotificationSmtpHost,
+                config.NotificationSmtpPort,
+                config.NotificationSmtpCredUser,
+                config.NotificationSmtpCredPw,
+                config.NotificationSmtpMailFrom);
         }
 
         /// <summary>

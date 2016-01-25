@@ -94,5 +94,65 @@ namespace SVC_HomeMaticNotification.Properties {
                 this["NotifierQueryFullRequestSec"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("smtp.gmail.com")]
+        public string NotificationSmtpHost {
+            get {
+                return ((string)(this["NotificationSmtpHost"]));
+            }
+            set {
+                this["NotificationSmtpHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("587")]
+        public string NotificationSmtpPort {
+            get {
+                return ((string)(this["NotificationSmtpPort"]));
+            }
+            set {
+                this["NotificationSmtpPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user@gmail.com")]
+        public string NotificationSmtpCredUser {
+            get {
+                return ((string)(this["NotificationSmtpCredUser"]));
+            }
+            set {
+                this["NotificationSmtpCredUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sprScrPsswrd!")]
+        public string NotificationSmtpCredPw {
+            get {
+                return ((string)(this["NotificationSmtpCredPw"]));
+            }
+            set {
+                this["NotificationSmtpCredPw"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user@gmail.com")]
+        public string NotificationSmtpMailFrom {
+            get {
+                return ((string)(this["NotificationSmtpMailFrom"]));
+            }
+            set {
+                this["NotificationSmtpMailFrom"] = value;
+            }
+        }
     }
 }

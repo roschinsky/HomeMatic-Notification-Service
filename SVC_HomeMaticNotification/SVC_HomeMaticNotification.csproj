@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HMNException.cs" />
+    <Compile Include="HMNotifierConfig.cs" />
     <Compile Include="HMNotifyDestination.cs" />
     <Compile Include="HMNotifyItem.cs" />
     <Compile Include="HMNotification.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="HMNotifyCondition.cs" />
     <Compile Include="HMNotifySilence.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="NotificationSmtp.cs" />
     <Compile Include="NotificationPushalot.cs" />
     <Compile Include="NotificationPushover.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -81,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

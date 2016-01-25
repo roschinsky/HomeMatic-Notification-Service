@@ -20,5 +20,20 @@
     <Setting Name="NotifierQueryFullRequestSec" Type="System.String" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="NotificationSmtpHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">smtp.gmail.com</Value>
+    </Setting>
+    <Setting Name="NotificationSmtpPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">587</Value>
+    </Setting>
+    <Setting Name="NotificationSmtpCredUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">user@gmail.com</Value>
+    </Setting>
+    <Setting Name="NotificationSmtpCredPw" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sprScrPsswrd!</Value>
+    </Setting>
+    <Setting Name="NotificationSmtpMailFrom" Type="System.String" Scope="User">
+      <Value Profile="(Default)">user@gmail.com</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
