@@ -287,7 +287,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
         }
 
         /// <summary>
-        /// Sends a push notification to the configured push provider
+        /// Sends a push or mail notification to the configured notify-provider
         /// </summary>
         /// <param name="notification"></param>
         /// <param name="destination"></param>
@@ -318,23 +318,31 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                         notification.DeviceAddress, 
                                         channelDetails);
 
-                Notification push = null;
+                Notification notify = null;
 
-                if (destination.PushProvider == HMNotifyDestination.PushProviderType.Pushalot)
+                if (destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Pushalot)
                 {
-                    push = new NotificationPushalot(destination.ApiKey, message, title, isImportant, isSilent);
-                    ((NotificationPushalot)push).Link = pushLink;
-                    ((NotificationPushalot)push).Source = destination.Name;
-                    return push.Send();
+                    notify = new NotificationPushalot(destination.DestinationAddress, message, title, isImportant, isSilent);
+                    ((NotificationPushalot)notify).Link = pushLink;
+                    ((NotificationPushalot)notify).Source = destination.Name;
+                    return notify.Send();
                 }
-                else if(destination.PushProvider == HMNotifyDestination.PushProviderType.Pushover)
+                else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Pushover)
                 {
-                    push = new NotificationPushover(destination.ApiKey, message, title, isImportant, isSilent);
-                    return push.Send();
+                    notify = new NotificationPushover(destination.DestinationAddress, message, title, isImportant, isSilent);
+                    return notify.Send();
+                }
+                else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Email)
+                {
+                    notify = new NotificationSmtp(destination.DestinationAddress, message, title, isImportant, isSilent);
+                    ((NotificationSmtp)notify).SmtpConfig = mailConfig;
+                    ((NotificationSmtp)notify).Link = pushLink;
+                    ((NotificationSmtp)notify).Source = destination.Name;
+                    return notify.Send();
                 }
                 else
                 {
-                    throw new HMNException("There was no push provider defined in destination.", null);
+                    throw new HMNException("There was no notify-provider defined in destination.", null);
                 }
             }
             catch(Exception ex)
@@ -409,28 +417,32 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                 {
                                     if (itemNode.Name == "pushalotApiKey")
                                     {
-                                        hmNotifyDest.ApiKey = itemNode.InnerText;
-                                        hmNotifyDest.PushProvider = HMNotifyDestination.PushProviderType.Pushalot;
+                                        hmNotifyDest.DestinationAddress = itemNode.InnerText;
+                                        hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushalot;
                                         hmNotifyDestinations.Add(hmNotifyDest);
                                     }
                                     if (itemNode.Name == "pushoverApiKey")
                                     {
-                                        hmNotifyDest.ApiKey = itemNode.InnerText;
-                                        hmNotifyDest.PushProvider = HMNotifyDestination.PushProviderType.Pushover;
+                                        hmNotifyDest.DestinationAddress = itemNode.InnerText;
+                                        hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushover;
                                         hmNotifyDestinations.Add(hmNotifyDest);
                                     }
-                                    if (itemNode.Name == "pushApiKey")
+                                    if (itemNode.Name == "notifyBy")
                                     {
-                                        string pushProvider = itemNode.Attributes["PushProvider"].Value;
+                                        string pushProvider = itemNode.Attributes["NotifyProvider"].Value;
                                         if(pushProvider.ToLower() == "pushalot")
                                         {
-                                            hmNotifyDest.PushProvider = HMNotifyDestination.PushProviderType.Pushalot;
+                                            hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushalot;
                                         }
                                         else if (pushProvider.ToLower() == "pushover")
                                         {
-                                            hmNotifyDest.PushProvider = HMNotifyDestination.PushProviderType.Pushover;
+                                            hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushover;
                                         }
-                                        hmNotifyDest.ApiKey = itemNode.InnerText;
+                                        else if (pushProvider.ToLower() == "email")
+                                        {
+                                            hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Email;
+                                        }
+                                        hmNotifyDest.DestinationAddress = itemNode.InnerText;
                                         hmNotifyDestinations.Add(hmNotifyDest);
                                     }
 

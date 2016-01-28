@@ -4,7 +4,10 @@
   <configHMNotifier pushMessageTitle="HMC" pushMessageUrlToWebUi="http://yourHomematic.local/">
     <notifyGroups>
       <notifyGroup Id="1" Name="HomeMatic-Notifier for Tyler" Owner="T. Durden" >
-        <pushalotApiKey>4c246115ca8848a8a87d63b0f9885a96</pushalotApiKey>
+        <!--
+        <notifyBy NotifyProvider="Pushalot">4c246115ca8848a8a87d63b0f9885a96</notifyBy>
+        -->
+        <notifyBy NotifyProvider="Email">win@halnet.selfip.org</notifyBy>
         <notifyItems>
           <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
           <notifyItem Scope="Raum 1" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >

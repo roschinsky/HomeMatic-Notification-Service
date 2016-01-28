@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -35,14 +33,14 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
         private void Initialize()
         {
-            apiUrl = "https://pushalot.com/api/sendmessage";
+            
         }
 
         public override bool Send()
         {
             try
             {
-                using (var client = new SmtpClient())
+                using (var client = new SmtpClient(SmtpConfig.Item1))
                 {
                     // Setup port if set
                     if(!String.IsNullOrWhiteSpace(SmtpConfig.Item2))
@@ -67,10 +65,17 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     MailMessage payload = new MailMessage(SmtpConfig.Item5, apiKey);
                     payload.Subject = title.Length > 250 ? title.Substring(0, 250) : title;
                     payload.BodyEncoding = UTF8Encoding.UTF8;
+                    payload.IsBodyHtml = false;
                     payload.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
                     payload.Body = message.Length > 32768 ? message.Substring(0, 32768) : message;
-                    payload.Headers.Add("HMC-Src", source.Length > 25 ? source.Substring(0, 25) : source);
-                    payload.Headers.Add("HMC-Lnk", Link.Length > 1000 ? Link.Substring(0, 1000) : Link);
+                    if (!String.IsNullOrEmpty(source))
+                    {
+                        payload.Headers.Add("HMC-Src", source.Length > 25 ? source.Substring(0, 25) : source);
+                    }
+                    if (!String.IsNullOrEmpty(Link))
+                    {
+                        payload.Headers.Add("HMC-Lnk", Link.Length > 1000 ? Link.Substring(0, 1000) : Link);
+                    }
 
                     if(isImportant)
                     {

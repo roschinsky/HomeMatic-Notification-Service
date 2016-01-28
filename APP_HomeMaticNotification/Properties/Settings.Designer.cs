@@ -31,5 +31,41 @@ namespace TRoschinsky.Service.HomeMaticNotification.Properties {
                 return ((string)(this["NotifierConfigFile"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("mxr")]
+        public string NotificationSmtpHost {
+            get {
+                return ((string)(this["NotificationSmtpHost"]));
+            }
+            set {
+                this["NotificationSmtpHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string NotificationSmtpPort {
+            get {
+                return ((string)(this["NotificationSmtpPort"]));
+            }
+            set {
+                this["NotificationSmtpPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("no-reply@example.com")]
+        public string NotificationSmtpMailFrom {
+            get {
+                return ((string)(this["NotificationSmtpMailFrom"]));
+            }
+            set {
+                this["NotificationSmtpMailFrom"] = value;
+            }
+        }
     }
 }
