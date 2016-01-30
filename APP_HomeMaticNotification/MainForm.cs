@@ -83,6 +83,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                         if (notifyItem.LastNotification != null && notifyItem.LastNotification.DataPoint != null)
                         {
                             item = new ListViewItem(notifyItem.DeviceAddress);
+                            item.Tag = notifyItem;
                             item.SubItems.Add(notifyItem.Scope);
                             item.SubItems.Add(notifyItem.Name);
                             item.SubItems.Add(notifyItem.IsImportant ? "VIP" : "Normal");
@@ -146,6 +147,8 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
                     if (notifier != null && notifier.IsConnected)
                     {
+                        notifier.JustSimulateSending = checkBoxSimulateSend.Checked;
+
                         timer.Start();
                         txtUrl.Enabled = false;
                         richTextBoxEvents.Enabled = richTextBoxLog.Enabled = listViewDevices.Enabled = true;
@@ -182,6 +185,22 @@ namespace TRoschinsky.Service.HomeMaticNotification
             if (notifier != null)
             {
                 notifier.JustSimulateSending = checkBoxSimulateSend.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Eventhandler for double clicking the list view to open a new Form for testing silence times
+        /// </summary>
+        private void listViewDevices_DoubleClick(object sender, EventArgs e)
+        {
+            if(listViewDevices.SelectedItems != null && listViewDevices.SelectedItems.Count == 1 && listViewDevices.SelectedItems[0].Tag != null)
+            {
+                HMNotifyItem item = (listViewDevices.SelectedItems[0]).Tag as HMNotifyItem;
+                if(item != null)
+                {
+                    TestSilenceTimesForm silenceTestForm = new TestSilenceTimesForm(item);
+                    silenceTestForm.ShowDialog();
+                }
             }
         }
 

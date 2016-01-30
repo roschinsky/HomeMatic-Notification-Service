@@ -45,6 +45,7 @@
             this.colHead7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHead9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHead10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colHead11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label3 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -52,7 +53,6 @@
             this.txtUrl = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.checkBoxSimulateSend = new System.Windows.Forms.CheckBox();
-            this.colHead11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -172,6 +172,7 @@
             this.listViewDevices.TabIndex = 2;
             this.listViewDevices.UseCompatibleStateImageBehavior = false;
             this.listViewDevices.View = System.Windows.Forms.View.Details;
+            this.listViewDevices.DoubleClick += new System.EventHandler(this.listViewDevices_DoubleClick);
             // 
             // colHead1
             // 
@@ -221,6 +222,11 @@
             // 
             this.colHead10.Text = "Was sent";
             this.colHead10.Width = 50;
+            // 
+            // colHead11
+            // 
+            this.colHead11.Text = "Destination";
+            this.colHead11.Width = 120;
             // 
             // label3
             // 
@@ -288,11 +294,6 @@
             this.checkBoxSimulateSend.Text = "Simulate sending";
             this.checkBoxSimulateSend.UseVisualStyleBackColor = true;
             this.checkBoxSimulateSend.CheckedChanged += new System.EventHandler(this.checkBoxSimulateSend_CheckedChanged);
-            // 
-            // colHead11
-            // 
-            this.colHead11.Text = "Destination";
-            this.colHead11.Width = 120;
             // 
             // MainForm
             // 

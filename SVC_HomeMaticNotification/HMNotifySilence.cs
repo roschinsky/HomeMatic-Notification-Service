@@ -42,12 +42,12 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
         }
 
-        public bool IsSilenceNow()
+        public bool IsSilenceNow(DateTime simulateCurrentDateTime)
         {
             if ((silenceStartHour * 60 + silenceStartMinute) < (silenceEndHour * 60 + silenceEndMinute))
             {
-                DateTime now = DateTime.Now;
-                if(now.DayOfWeek == silenceDay)
+                DateTime now = simulateCurrentDateTime;
+                if (now.DayOfWeek == silenceDay)
                 {
                     if ((now.Hour >= silenceStartHour && now.Minute >= silenceStartMinute) &&
                         (now.Hour <= silenceEndHour && now.Minute <= silenceEndMinute))
@@ -57,6 +57,11 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 }
             }
             return false;
+        }
+
+        public bool IsSilenceNow()
+        {
+            return IsSilenceNow(DateTime.Now);
         }
 
         public override string ToString()
