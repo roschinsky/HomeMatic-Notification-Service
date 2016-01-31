@@ -21,16 +21,19 @@
             </conditions>
           </notifyItem>
           <notifyItem Scope="Raum 2" Name="Tester" DeviceAddress="LEQ1468026" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
-            <conditions>
-              <varCondition IseId="950" ConditionMatchValue="false" />
-            </conditions>
+            <silenceTimes>
+              <silence Day="Saturday" Start="08:30" End="21:00" />
+              <silence Day="Sunday" Start="09:00" End="20:30" />
+              <silence Day="Monady" Start="19:10" End="19:55" />
+              <silence Day="Wednesday" Start="17:00" End="19:45" />
+            </silenceTimes>
           </notifyItem>
           <notifyItem Scope="Raum 3" Name="Test-Switch Ch1" DeviceAddress="LEQ0252664" DeviceChannel="1" ValueKey="PRESS_LONG" IsImportant="false" />
           <notifyItem Scope="Raum 3" Name="Test-Switch Ch2" DeviceAddress="LEQ0252664" DeviceChannel="2" ValueKey="PRESS_LONG" IsImportant="false" />
           <notifyItem Scope="Raum 3" Name="Test-Sensor" DeviceAddress="LEQ0758115" DeviceChannel="1" ValueKey="STATE" IsImportant="false" >
             <silenceTimes>
-              <silence Day="Saturday" Start="09:00" End="20:00" />
-              <silence Day="Sunday" Start="09:00" End="20:00" />
+              <silence Day="Saturday" Start="08:30" End="21:00" />
+              <silence Day="Sunday" Start="09:00" End="20:30" />
             </silenceTimes>
           </notifyItem>
         </notifyItems>

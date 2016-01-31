@@ -5,24 +5,20 @@ namespace TRoschinsky.Service.HomeMaticNotification
     /// <summary>
     /// The HMNotifySilence is similar to the HMNotifyCondition. It also can be used to prevent 
     /// some events of raising a notification by setting up one of this conditions. The difference 
-    /// is to define a time span in which not notification should be sent, instead of choosing 
+    /// is to define a time span in which a notification should not be sent, instead of choosing 
     /// devices or variables for blocking a transmission.
     /// It contains logic to determine if the silence time is right now.
     /// </summary>
     public class HMNotifySilence
     {
-        private int silenceStartHour = 0;
-        private int silenceStartMinute = 0;
-        private int silenceEndHour = 0;
-        private int silenceEndMinute = 0;
+        private TimeSpan silenceStart;
+        private TimeSpan silenceEnd;
         private DayOfWeek silenceDay = DayOfWeek.Monday;
 
         public HMNotifySilence(int startHour, int startMinute, int endHour, int endMinute, DayOfWeek day)
         {
-            silenceStartHour = startHour;
-            silenceStartMinute = startMinute;
-            silenceEndHour = endHour;
-            silenceEndMinute = endMinute;
+            silenceStart = new TimeSpan(startHour, startMinute, 0);
+            silenceEnd = new TimeSpan(endHour, endMinute, 0);
             silenceDay = day;
         }
 
@@ -34,28 +30,31 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             else
             {
-                silenceStartHour = start.Hour;
-                silenceStartMinute = start.Minute;
-                silenceEndHour = end.Hour;
-                silenceEndMinute = end.Minute;
+                silenceStart = new TimeSpan(start.Hour, start.Hour, 0);
+                silenceEnd = new TimeSpan(end.Hour, end.Hour, 0);
                 silenceDay = start.DayOfWeek;    
             }
         }
 
-        public bool IsSilenceNow(DateTime simulateCurrentDateTime)
+        public bool IsSilenceNow(DateTime currentDateTime)
         {
-            if ((silenceStartHour * 60 + silenceStartMinute) < (silenceEndHour * 60 + silenceEndMinute))
+            if (currentDateTime.DayOfWeek == silenceDay)
             {
-                DateTime now = simulateCurrentDateTime;
-                if (now.DayOfWeek == silenceDay)
+                // day is a match so lets compare the time of the day
+                TimeSpan currentTimeSpan = currentDateTime.TimeOfDay;
+
+                if (silenceStart < silenceEnd)
                 {
-                    if ((now.Hour >= silenceStartHour && now.Minute >= silenceStartMinute) &&
-                        (now.Hour <= silenceEndHour && now.Minute <= silenceEndMinute))
-                    {
-                        return true;
-                    }
+                    // start comes before end, so lets compare straight foreward
+                    return silenceStart <= currentTimeSpan && currentTimeSpan <= silenceEnd;
+                }
+                else
+                {
+                    // otherwise start is after end, so we need to inverse the comparison
+                    return !(silenceEnd < currentTimeSpan && currentTimeSpan < silenceStart);
                 }
             }
+
             return false;
         }
 
@@ -66,7 +65,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
         public override string ToString()
         {
-            return String.Format("Silence on {0} from {1:D2}:{2:D2}h to {3:D2}:{4:D2}h", silenceDay, silenceStartHour, silenceStartMinute, silenceEndHour, silenceEndMinute);
+            return String.Format("Silence on {0} from {1:D2}:{2:D2}h to {3:D2}:{4:D2}h", silenceDay, silenceStart.Hours, silenceStart.Minutes, silenceEnd.Hours, silenceEnd.Minutes);
         }
     }
 }
