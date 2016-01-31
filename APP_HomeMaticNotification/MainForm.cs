@@ -198,7 +198,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 HMNotifyItem item = (listViewDevices.SelectedItems[0]).Tag as HMNotifyItem;
                 if(item != null)
                 {
-                    TestSilenceTimesForm silenceTestForm = new TestSilenceTimesForm(item);
+                    NotifyItemForm silenceTestForm = new NotifyItemForm(item);
                     silenceTestForm.ShowDialog();
                 }
             }

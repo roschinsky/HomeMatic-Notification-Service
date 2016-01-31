@@ -65,11 +65,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TestSilenceTimesForm.cs">
+    <Compile Include="NotifyItemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestSilenceTimesForm.Designer.cs">
-      <DependentUpon>TestSilenceTimesForm.cs</DependentUpon>
+    <Compile Include="NotifyItemForm.Designer.cs">
+      <DependentUpon>NotifyItemForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -78,8 +78,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestSilenceTimesForm.resx">
-      <DependentUpon>TestSilenceTimesForm.cs</DependentUpon>
+    <EmbeddedResource Include="NotifyItemForm.resx">
+      <DependentUpon>NotifyItemForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
