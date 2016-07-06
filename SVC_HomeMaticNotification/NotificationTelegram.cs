@@ -18,6 +18,8 @@ namespace TRoschinsky.Service.HomeMaticNotification
         private const string botKey = "269686691:AAFsAA9n4qNUKyYb2PYHac3SpR0GLaBUDDQ";
 
         // Emojis
+        private string icoAppSymbol = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x8F, 0xA0 }); //\u1F3E0
+        private string icoNotifySilent = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x94, 0x95 }); //\u1F515
         private string icoNotifyNormal = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x94, 0x94 }); //\u1F514
         private string icoNotifyImportant = Encoding.UTF8.GetString(new byte[] { 0xF0, 0x9F, 0x93, 0xA2 }); //\u1F4E2
         private string icoCheck = Encoding.UTF8.GetString(new byte[] { 0xE2, 0x9C, 0x94 }); //\u2714
@@ -43,11 +45,6 @@ namespace TRoschinsky.Service.HomeMaticNotification
         private void Initialize()
         {
             apiUrl = String.Format("https://api.telegram.org/bot{0}/sendMessage", botKey);
-
-            if(Send())
-            {
-                NotificationSuccessfulSend = true;
-            }
         }
 
         public override bool Send()
@@ -71,6 +68,8 @@ namespace TRoschinsky.Service.HomeMaticNotification
                         NotificationWebResponse = reader.ReadToEnd();
                     }
                 }
+
+                NotificationSuccessfulSend = true;
                 return true;
             }
             catch (WebException exWeb)
@@ -84,6 +83,8 @@ namespace TRoschinsky.Service.HomeMaticNotification
             {
                 // TODO: Implement error handling
             }
+
+            NotificationSuccessfulSend = false;
             return false;
         }
 
@@ -92,24 +93,19 @@ namespace TRoschinsky.Service.HomeMaticNotification
             string result = String.Empty;
             try
             {
-                string headline = String.Format("{1} *{0}*\n", title, (isImportant ? icoNotifyImportant : icoNotifyNormal));
+                string headline = String.Format("{0}{1} *{2}*\n", icoAppSymbol, (isImportant ? icoNotifyImportant : (isSilent ? icoNotifySilent : icoNotifyNormal)), title);
                 result += headline;
 
                 int endOfFirstLine = message.IndexOf("\n");
                 int startOfLastLine = message.LastIndexOf("\n");
 
                 string firstLine = String.Format("_{0}_", message.Substring(0, endOfFirstLine));
+                firstLine = firstLine.Replace("'True'", icoCheck);
+                firstLine = firstLine.Replace("'False'", icoCross);
                 result += firstLine;
 
                 string checks = String.Format("```{0}```", message.Substring(endOfFirstLine, startOfLastLine - endOfFirstLine));
-                checks = checks.Replace("[Y]", icoCheck);
-                checks = checks.Replace("[N]", icoCross);
-                checks = checks.Replace("[!]", icoExMark);
                 result += checks;
-
-                string lastLine = String.Format("{0} [R]", message.Substring(startOfLastLine));
-                lastLine = lastLine.Replace("[R]", lastLine.Contains("issues detected") ? icoThumbDown : icoThumbUp);
-                result += lastLine;
             }
             catch (Exception)
             {

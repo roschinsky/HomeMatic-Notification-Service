@@ -1,56 +1,92 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Configuration file for "HomeMatic Notification Service" -->
 <config>
-  <configHMNotifier pushMessageTitle="HMC" pushMessageUrlToWebUi="http://yourHomematic.local/">
+  <configHMNotifier pushalotTitle="HMC" pushalotUrlToWebUi="http://halnet.selfip.org/HmcMain.aspx">
     <notifyGroups>
-      <notifyGroup Id="1" Name="HomeMatic-Notifier for Tyler" Owner="T. Durden" >
+      <notifyGroup Id="1" Name="HomeMatic-Info Tommy" Owner="Tommy" >
         <!--
-        <notifyBy NotifyProvider="Pushalot">4c246115ca8848a8a87d63b0f9885a96</notifyBy>
-        <notifyBy NotifyProvider="Email">win@halnet.selfip.org</notifyBy>
-        -->
-        <notifyBy NotifyProvider="Telegram">43763823</notifyBy>
+        <pushalotApiKey>eaf17d236e304961a9e4ef72701fc458</pushalotApiKey>
+-->
+        <notifyBy NotifyProvider="Telegram">193425301</notifyBy>
         <notifyItems>
-          <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
-          <notifyItem Scope="Raum 1" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
+          <notifyItem Scope="Flur" Name="Wohnungstür" DeviceAddress="LEQ0502263" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
+          <notifyItem Scope="Flur" Name="Rauchmelder" DeviceAddress="*LEQ0436957" DeviceChannel="1" ValueKey="STATE" IsImportant="true" />
+          <notifyItem Scope="Flur" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
+            <!--
+            <silenceTimes>
+              <silence Day="Saturday" Start="07:00" End="24:00" />
+              <silence Day="Sunday" Start="07:00" End="23:00" />
+            </silenceTimes>
+            -->
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+              <!--
+              <devCondition DeviceAddress="LEQ0502263" DeviceChannel="1" ValueKey="STATE" ConditionMatchValue="false" />
+              -->
+            </conditions>
+          </notifyItem>
+          <notifyItem Scope="Schlafzimmer" Name="Tür" DeviceAddress="LEQ1468091" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
             <conditions>
               <varCondition IseId="950" ConditionMatchValue="false" />
             </conditions>
           </notifyItem>
-          <notifyItem Scope="Raum 2" Name="Tür" DeviceAddress="LEQ1468091" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
-            <conditions>
-              <devCondition DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" ConditionMatchValue="false" />
-            </conditions>
-          </notifyItem>
-          <notifyItem Scope="Raum 2" Name="Tester" DeviceAddress="LEQ1468026" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
+          <notifyItem Scope="Wohnzimmer" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="false" />
+          <notifyItem Scope="Küche" Name="Fenster" DeviceAddress="LEQ0500865" DeviceChannel="1" ValueKey="STATE" IsImportant="false" />
+          <notifyItem Scope="Bad" Name="Fenster" DeviceAddress="LEQ0503598" DeviceChannel="1" ValueKey="STATE" IsImportant="false" />
+          <notifyItem Scope="Ruben" Name="Fenster" DeviceAddress="LEQ0503768" DeviceChannel="1" ValueKey="STATE" IsImportant="false" />
+          <notifyItem Scope="Ruben" Name="Tür" DeviceAddress="LEQ1468026" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
             <silenceTimes>
-              <silence Day="Saturday" Start="08:30" End="21:00" />
-              <silence Day="Sunday" Start="09:00" End="20:30" />
-              <silence Day="Monady" Start="19:10" End="19:55" />
-              <silence Day="Wednesday" Start="17:00" End="19:45" />
+              <silence Day="Monday" Start="07:00" End="20:00" />
+              <silence Day="Tuesday" Start="07:00" End="20:00" />
+              <silence Day="Wednesday" Start="07:00" End="20:00" />
+              <silence Day="Thursday" Start="07:00" End="20:00" />
+              <silence Day="Friday" Start="07:00" End="20:00" />
+              <silence Day="Saturday" Start="07:00" End="11:45" />
+              <silence Day="Saturday" Start="16:00" End="20:30" />
+              <silence Day="Sunday" Start="07:00" End="11:45" />
+              <silence Day="Sunday" Start="16:00" End="20:30" />
             </silenceTimes>
           </notifyItem>
-          <notifyItem Scope="Raum 3" Name="Test-Switch Ch1" DeviceAddress="LEQ0252664" DeviceChannel="1" ValueKey="PRESS_LONG" IsImportant="false" />
-          <notifyItem Scope="Raum 3" Name="Test-Switch Ch2" DeviceAddress="LEQ0252664" DeviceChannel="2" ValueKey="PRESS_LONG" IsImportant="false" />
-          <notifyItem Scope="Raum 3" Name="Test-Sensor" DeviceAddress="LEQ0758115" DeviceChannel="1" ValueKey="STATE" IsImportant="false" >
-            <conditions>
-              <varCondition IseId="950" ConditionMatchValue="false" />
-            </conditions>
-          </notifyItem>
         </notifyItems>
       </notifyGroup>
-      <!--
-      <notifyGroup Id="2" Name="Jeffrey is watching you" Owner="J. Goines" >
-        <pushoverApiKey>8293a7e38c4e9832e7983249832fe82a</pushalotApiKey>
+      <notifyGroup Id="2" Name="HomeMatic-Info Franzi" Owner="Franzi" >
+        <!--
+        <pushalotApiKey>04df9de242e74e6a88e74cc2f27aa47e</pushalotApiKey>
+-->
+        <notifyBy NotifyProvider="Telegram">230137447</notifyBy>
         <notifyItems>
-          <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
-          <notifyItem Scope="Raum 3" Name="Test-Sensor" DeviceAddress="LEQ0758115" DeviceChannel="1" ValueKey="STATE" IsImportant="false" >
+          <notifyItem Scope="Flur" Name="Wohnungstür" DeviceAddress="LEQ0502263" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
+          <notifyItem Scope="Flur" Name="Rauchmelder" DeviceAddress="*LEQ0436957" DeviceChannel="1" ValueKey="STATE" IsImportant="true" />
+          <!--
+          <notifyItem Scope="Schlafzimmer" Name="Tür" DeviceAddress="LEQ1468091" DeviceChannel="1" ValueKey="STATE" IsImportant="false" IsSilent="true" >
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+          -->
+          <notifyItem Scope="Flur" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
             <conditions>
               <varCondition IseId="950" ConditionMatchValue="false" />
             </conditions>
           </notifyItem>
         </notifyItems>
       </notifyGroup>
-      -->
+      <notifyGroup Id="3" Name="HomeMatic RFT" Owner="Christian" >
+        <pushalotApiKey>a88cd0d9743c40efbd2ee21291b425ea</pushalotApiKey>
+        <notifyItems>
+          <notifyItem Scope="Flur" Name="Wohnungstür" DeviceAddress="LEQ0502263" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" >
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+          <notifyItem Scope="Flur" Name="Rauchmelder" DeviceAddress="*LEQ0436957" DeviceChannel="1" ValueKey="STATE" IsImportant="true" />
+          <notifyItem Scope="Flur" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
+            <conditions>
+              <varCondition IseId="950" ConditionMatchValue="false" />
+            </conditions>
+          </notifyItem>
+        </notifyItems>
+      </notifyGroup>
     </notifyGroups>
   </configHMNotifier>
 </config>
