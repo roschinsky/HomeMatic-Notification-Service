@@ -13,6 +13,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
         {
             Pushalot,
             Pushover,
+            Telegram,
             Email
         }
 

@@ -62,7 +62,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     client.DeliveryMethod = SmtpDeliveryMethod.Network;
                     client.Timeout = 5000;
 
-                    MailMessage payload = new MailMessage(SmtpConfig.Item5, apiKey);
+                    MailMessage payload = new MailMessage(SmtpConfig.Item5, rcpt);
                     payload.Subject = title.Length > 250 ? title.Substring(0, 250) : title;
                     payload.BodyEncoding = UTF8Encoding.UTF8;
                     payload.IsBodyHtml = false;

@@ -207,7 +207,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                         HMSystemVariable variable = hmWrapper.Variables.First(v => v.InternalId == condition.IseId);
                                         if(variable != null)
                                         {
-                                            varMismatch = condition.ConditionMatchValue.ToLower() != variable.Value.ToLower();
+                                            varMismatch = condition.ConditionMatchValue.ToLower() != variable.ValueString.ToLower();
                                         }
                                     }
                                     else if(condition.CType == HMNotifyCondition.ConditionType.Device)
@@ -332,6 +332,11 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     notify = new NotificationPushover(destination.DestinationAddress, message, title, isImportant, isSilent);
                     return notify.Send();
                 }
+                else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Telegram)
+                {
+                    notify = new NotificationTelegram(destination.DestinationAddress, message, title, isImportant, isSilent);
+                    return notify.Send();
+                }
                 else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Email)
                 {
                     notify = new NotificationSmtp(destination.DestinationAddress, message, title, isImportant, isSilent);
@@ -437,6 +442,10 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                         else if (pushProvider.ToLower() == "pushover")
                                         {
                                             hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushover;
+                                        }
+                                        else if (pushProvider.ToLower() == "telegram")
+                                        {
+                                            hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Telegram;
                                         }
                                         else if (pushProvider.ToLower() == "email")
                                         {

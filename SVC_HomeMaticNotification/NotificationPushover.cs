@@ -43,7 +43,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 {
                     NameValueCollection payload = new NameValueCollection();
                     payload["token"] = appKey;
-                    payload["user"] = apiKey;
+                    payload["user"] = rcpt;
                     payload["title"] = title.Length > 250 ? title.Substring(0, 250) : title;
                     payload["message"] = message.Length > 1024 ? message.Substring(0, 1024) : message;
                     if (priority != 0)

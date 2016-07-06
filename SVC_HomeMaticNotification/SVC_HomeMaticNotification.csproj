@@ -61,6 +61,7 @@
     <Compile Include="NotificationSmtp.cs" />
     <Compile Include="NotificationPushalot.cs" />
     <Compile Include="NotificationPushover.cs" />
+    <Compile Include="NotificationTelegram.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -84,6 +85,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ConfigTemplate.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

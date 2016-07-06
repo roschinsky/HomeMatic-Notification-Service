@@ -9,7 +9,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
     public abstract class Notification
     {
         protected string apiUrl;
-        protected string apiKey;
+        protected string rcpt;
         protected string message;
         protected string title;
         protected string source = "HomeMaticNotification";
@@ -19,18 +19,18 @@ namespace TRoschinsky.Service.HomeMaticNotification
         public string NotificationWebResponse = String.Empty;
 
 
-        public Notification(string apiKey, string message, string title, bool isImportant, bool isSilent)
+        public Notification(string rcptTo, string message, string title, bool isImportant, bool isSilent)
         {
-            this.apiKey = apiKey;
+            this.rcpt = rcptTo;
             this.message = message;
             this.title = title;
             this.isImportant = isImportant;
             this.isSilent = isSilent;
         }
 
-        public Notification(string apiKey, string message, string title)
+        public Notification(string rcptTo, string message, string title)
         {
-            this.apiKey = apiKey;
+            this.rcpt = rcptTo;
             this.message = message;
             this.title = title;
             this.isImportant = false;

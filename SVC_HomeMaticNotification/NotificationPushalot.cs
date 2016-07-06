@@ -43,7 +43,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 using (var client = new WebClient())
                 {
                     NameValueCollection payload = new NameValueCollection();
-                    payload["AuthorizationToken"] = apiKey;
+                    payload["AuthorizationToken"] = rcpt;
                     payload["Title"] = title.Length > 250 ? title.Substring(0, 250) : title;
                     payload["Body"] = message.Length > 32768 ? message.Substring(0, 32768) : message;
                     payload["IsImportant"] = isImportant.ToString().ToUpper();
