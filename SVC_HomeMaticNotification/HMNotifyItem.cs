@@ -10,10 +10,18 @@ namespace TRoschinsky.Service.HomeMaticNotification
     /// </summary>
     public class HMNotifyItem
     {
+        public enum ItemType
+        {
+            Device,
+            Variable,
+            Undefined
+        }
+
         public string Scope { get; set; }
         public string Name { get; set; }
         public string DeviceAddress { get; set; }
         public string DeviceChannel { get; set; }
+        public int VariableId { get; set; }
         public string ValueKey { get; set; }
         public bool IsImportant { get; set; }
         public bool IsSilent { get; set; }
@@ -31,6 +39,15 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
         private List<HMNotifyCondition> conditions = new List<HMNotifyCondition>();
         public HMNotifyCondition[] Conditions { get { return conditions.ToArray(); } }
+        public ItemType HMNotifyType
+        {
+            get
+            {
+                return (String.IsNullOrEmpty(DeviceAddress) && String.IsNullOrEmpty(DeviceChannel) ?
+                    (VariableId <= 0 ? ItemType.Undefined : ItemType.Variable) : ItemType.Device);
+            }
+        }
+
 
         public HMNotifyItem()
         {
@@ -83,7 +100,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
         public override string ToString()
         {
-            return String.Format("Notify-Item in {0}: {1} - {2}", Scope, Name, LastNotification);
+            return String.Format("Notify-{3} in {0}: {1} - {2}", Scope, Name, LastNotification, HMNotifyType);
         }
     }
 }

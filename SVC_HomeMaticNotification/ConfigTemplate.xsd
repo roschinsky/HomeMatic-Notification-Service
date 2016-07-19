@@ -12,7 +12,11 @@
                     <xs:element maxOccurs="unbounded" name="notifyGroup">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="apiKey" type="xs:string" />
+                          <xs:element name="notifyBy" type="xs:string">
+                            <xs:complexType>
+                              <xs:attribute name="NotifyProvider" />
+                            </xs:complexType>
+                          </xs:element>
                           <xs:element name="notifyItems">
                             <xs:complexType>
                               <xs:sequence>

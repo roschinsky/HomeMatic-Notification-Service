@@ -462,14 +462,28 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                         {
                                             try
                                             {
-                                                HMNotifyItem hmNotifyItem = new HMNotifyItem()
+                                                HMNotifyItem hmNotifyItem = null;
+
+                                                if (hmItemXml.Attributes.GetNamedItem("VariableId") != null)
                                                 {
-                                                    DeviceAddress = hmItemXml.Attributes["DeviceAddress"].Value,
-                                                    DeviceChannel = hmItemXml.Attributes["DeviceChannel"].Value,
-                                                    Scope = hmItemXml.Attributes["Scope"].Value,
-                                                    Name = hmItemXml.Attributes["Name"].Value,
-                                                    ValueKey = hmItemXml.Attributes["ValueKey"].Value                                                  
-                                                };
+                                                    hmNotifyItem = new HMNotifyItem()
+                                                    {
+                                                        VariableId = int.Parse(hmItemXml.Attributes["VariableId"].Value),
+                                                        Scope = hmItemXml.Attributes["Scope"].Value,
+                                                        Name = hmItemXml.Attributes["Name"].Value
+                                                    };
+                                                }
+                                                else
+                                                {
+                                                    hmNotifyItem = new HMNotifyItem()
+                                                    {
+                                                        DeviceAddress = hmItemXml.Attributes["DeviceAddress"].Value,
+                                                        DeviceChannel = hmItemXml.Attributes["DeviceChannel"].Value,
+                                                        Scope = hmItemXml.Attributes["Scope"].Value,
+                                                        Name = hmItemXml.Attributes["Name"].Value,
+                                                        ValueKey = hmItemXml.Attributes["ValueKey"].Value
+                                                    };
+                                                }
 
                                                 hmNotifyItem.IsImportant = bool.Parse(hmItemXml.Attributes["IsImportant"] != null ? hmItemXml.Attributes["IsImportant"].Value : "false");
                                                 hmNotifyItem.IsSilent = bool.Parse(hmItemXml.Attributes["IsSilent"] != null ? hmItemXml.Attributes["IsSilent"].Value : "false");
