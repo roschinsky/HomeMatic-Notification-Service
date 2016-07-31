@@ -6,28 +6,103 @@
         <xs:element name="configHMNotifier">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="notifyGroups">
+              <xs:element name="notifyGroups" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element maxOccurs="unbounded" name="notifyGroup">
+                    <xs:element name="notifyGroup">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="notifyBy" type="xs:string">
+                          <xs:element name="notifyBy" minOccurs="1" maxOccurs="1">
                             <xs:complexType>
-                              <xs:attribute name="NotifyProvider" />
+                              <xs:simpleContent>
+                                <xs:extension base="xs:unsignedInt">
+                                  <xs:attribute name="NotifyProvider" type="xs:string" use="required" />
+                                </xs:extension>
+                              </xs:simpleContent>
                             </xs:complexType>
                           </xs:element>
-                          <xs:element name="notifyItems">
+                          <xs:element name="notifyItems" maxOccurs="1">
                             <xs:complexType>
-                              <xs:sequence>
+                              <xs:sequence minOccurs="0">
+                                <xs:element maxOccurs="unbounded" name="notifyVariable">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element minOccurs="0" maxOccurs="unbounded" name="conditions">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="varCondition">
+                                              <xs:complexType>
+                                                <xs:attribute name="IseId" type="xs:unsignedShort" use="required" />
+                                                <xs:attribute name="ConditionMatchValue" type="xs:boolean" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="unbounded" name="silenceTimes">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element maxOccurs="unbounded" name="silence">
+                                              <xs:complexType>
+                                                <xs:attribute name="Day" type="xs:string" use="required" />
+                                                <xs:attribute name="Start" type="xs:string" use="required" />
+                                                <xs:attribute name="End" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="Name" type="xs:string" use="required" />
+                                    <xs:attribute name="IseId" type="xs:unsignedShort" use="required" />
+                                    <xs:attribute name="IsImportant" type="xs:boolean" use="optional" />
+                                    <xs:attribute name="IsSilent" type="xs:boolean" use="optional" />
+                                    <xs:attribute name="PreventNotificationStatus" type="xs:boolean" use="optional" />
+                                  </xs:complexType>
+                                </xs:element>
                                 <xs:element maxOccurs="unbounded" name="notifyItem">
                                   <xs:complexType>
+                                    <xs:sequence minOccurs="0">
+                                      <xs:element  minOccurs="0" maxOccurs="unbounded" name="silenceTimes">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element maxOccurs="unbounded" name="silence">
+                                              <xs:complexType>
+                                                <xs:attribute name="Day" type="xs:string" use="required" />
+                                                <xs:attribute name="Start" type="xs:string" use="required" />
+                                                <xs:attribute name="End" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" maxOccurs="unbounded" name="conditions">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element minOccurs="0" name="devCondition">
+                                              <xs:complexType>
+                                                <xs:attribute name="DeviceAddress" type="xs:string" use="required" />
+                                                <xs:attribute name="DeviceChannel" type="xs:unsignedByte" use="required" />
+                                                <xs:attribute name="ValueKey" type="xs:string" use="required" />
+                                                <xs:attribute name="ConditionMatchValue" type="xs:boolean" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" name="varCondition">
+                                              <xs:complexType>
+                                                <xs:attribute name="IseId" type="xs:unsignedShort" use="required" />
+                                                <xs:attribute name="ConditionMatchValue" type="xs:boolean" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
                                     <xs:attribute name="Scope" type="xs:string" use="required" />
                                     <xs:attribute name="Name" type="xs:string" use="required" />
                                     <xs:attribute name="DeviceAddress" type="xs:string" use="required" />
                                     <xs:attribute name="DeviceChannel" type="xs:unsignedByte" use="required" />
                                     <xs:attribute name="ValueKey" type="xs:string" use="required" />
-                                    <xs:attribute name="IsImportant" type="xs:boolean" use="required" />
+                                    <xs:attribute name="IsImportant" type="xs:boolean" use="optional" />
                                     <xs:attribute name="QueryIntervallSeconds" type="xs:unsignedByte" use="optional" />
                                     <xs:attribute name="IsSilent" type="xs:boolean" use="optional" />
                                     <xs:attribute name="PreventNotificationStatus" type="xs:boolean" use="optional" />
@@ -46,6 +121,8 @@
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
+            <xs:attribute name="pushMessageTitle" type="xs:string" use="required" />
+            <xs:attribute name="pushMessageUrlToWebUi" type="xs:string" use="required" />
           </xs:complexType>
         </xs:element>
       </xs:sequence>

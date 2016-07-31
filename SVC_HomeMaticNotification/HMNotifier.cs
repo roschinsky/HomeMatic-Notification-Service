@@ -154,26 +154,56 @@ namespace TRoschinsky.Service.HomeMaticNotification
                         // check if there was a last notification for current notify item and if it was logged a time span greater than query interval ago
                         if (notifyItems[i].LastNotification == null || (DateTime.Now - notifyItems[i].LastNotification.TimeStamp) > notifyItems[i].QueryIntervall)
                         {
-                            string channelFullAddress = String.Format("{0}:{1}", notifyItems[i].DeviceAddress, notifyItems[i].DeviceChannel);
+                            HMNotification currentNotification = null;
+                            string fullAddress = String.Empty;
 
-                            // ask Homematic wrapper for datapoint to check for...
-                            HMDeviceDataPoint notifyDataPoint = hmWrapper.GetDataByAddress(channelFullAddress, notifyItems[i].ValueKey);
-
-                            // check if datapoint was obtained properly; if not throw an error
-                            if (notifyDataPoint == null)
+                            if (notifyItems[i].HMNotifyType == HMNotifyItem.ItemType.Device)
                             {
-                                throw new HMNException(String.Format("DataPoint for notify item '{0}' with address {1} could not checked. Please check configuration!", notifyItems[i].Name, channelFullAddress), null);
+                                fullAddress = String.Format("{0}:{1}", notifyItems[i].DeviceAddress, notifyItems[i].DeviceChannel);
+
+                                // ask Homematic wrapper for datapoint to check for...
+                                HMDeviceDataPoint notifyDataPoint = hmWrapper.GetDataByAddress(fullAddress, notifyItems[i].ValueKey);
+
+                                // check if datapoint was obtained properly; if not throw an error
+                                if (notifyDataPoint == null)
+                                {
+                                    throw new HMNException(String.Format("DataPoint for notify item '{0}' with address {1} could not be checked. Please check configuration!", notifyItems[i].Name, fullAddress), null);
+                                }
+
+                                // create new notification item
+                                currentNotification = new HMNotification()
+                                {
+                                    Scope = notifyItems[i].Scope,
+                                    Name = notifyItems[i].Name,
+                                    Address = fullAddress,
+                                    DataPoint = notifyDataPoint,
+                                    NotificationSent = false
+                                };
                             }
-
-                            // create new notification
-                            HMNotification currentNotification = new HMNotification()
+                            else if(notifyItems[i].HMNotifyType == HMNotifyItem.ItemType.Variable)
                             {
-                                Scope = notifyItems[i].Scope,
-                                Name = notifyItems[i].Name,
-                                DeviceAddress = channelFullAddress,
-                                DataPoint = notifyDataPoint,
-                                NotificationSent = false
-                            };
+                                // ask Homematic wrapper for system variable to check for...
+                                HMSystemVariable notifyVariable = hmWrapper.Variables.First(v => v.InternalId == notifyItems[i].VariableId);
+
+                                // check if system variable was obtained properly; if not throw an error
+                                if (notifyVariable == null)
+                                {
+                                    throw new HMNException(String.Format("System variable for notify item '{0}' with address {1} could not be checked. Please check configuration!", notifyItems[i].Name, String.Concat(notifyItems[i].VariableId)), null);
+                                }
+
+                                // create new notification variable
+                                currentNotification = new HMNotification()
+                                {
+                                    Name = notifyItems[i].Name,
+                                    Address = String.Concat(notifyItems[i].VariableId),
+                                    Variable = notifyVariable,
+                                    NotificationSent = false
+                                };
+                            }
+                            else
+                            {
+                                throw new HMNException(String.Format("Notify item '{0}' was not properly defined. Please check configuration!", notifyItems[i].Name), null);
+                            }
 
                             // set last notification of current notify item if it is not set...
                             if (notifyItems[i].LastNotification == null)
@@ -300,7 +330,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 string title = String.Format("{0} - {2}: {1}", pushTitle, notification.Name, notification.Scope);
 
                 string channelDetails = String.Empty;
-                HMDeviceChannel channel = hmWrapper.GetChannelByAddress(notification.DeviceAddress);
+                HMDeviceChannel channel = hmWrapper.GetChannelByAddress(notification.Address);
                 if (channel != null)
                 {
                     channelDetails = String.Format("** Details '{0}' **\n", channel.Name);
@@ -315,7 +345,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                         notification.Name, 
                                         notification.DataPoint.Value, 
                                         notification.TimeStamp,
-                                        notification.DeviceAddress, 
+                                        notification.Address, 
                                         channelDetails);
 
                 Notification notify = null;
@@ -468,8 +498,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                                 {
                                                     hmNotifyItem = new HMNotifyItem()
                                                     {
-                                                        VariableId = int.Parse(hmItemXml.Attributes["VariableId"].Value),
-                                                        Scope = hmItemXml.Attributes["Scope"].Value,
+                                                        VariableId = int.Parse(hmItemXml.Attributes["IseId"].Value),
                                                         Name = hmItemXml.Attributes["Name"].Value
                                                     };
                                                 }

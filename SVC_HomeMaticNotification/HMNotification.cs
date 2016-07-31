@@ -12,8 +12,9 @@ namespace TRoschinsky.Service.HomeMaticNotification
     {
         public string Scope { get; set; }
         public string Name { get; set; }
-        public string DeviceAddress { get; set; }
+        public string Address { get; set; }
         public HMDeviceDataPoint DataPoint { get; set; }
+        public HMSystemVariable Variable { get; set; }
         private DateTime timeStamp = DateTime.Now;
         public DateTime TimeStamp { get { return timeStamp; } }
         public bool NotificationSent { get; set; }
@@ -22,11 +23,15 @@ namespace TRoschinsky.Service.HomeMaticNotification
         {
             if (DataPoint != null)
             {
-                return String.Format("{2}: {4} @{3}", Scope, Name, DeviceAddress, TimeStamp, DataPoint.Value);
+                return String.Format("{1}: {3} @{2}", Name, Address, TimeStamp, DataPoint.Value);
+            }
+            else if(Variable != null)
+            {
+                return String.Format("IseID #{1}: {0} @{2}", Name, Address, TimeStamp);
             }
             else
             {
-                return String.Format("{2}: Unknown @{3}", Scope, Name, DeviceAddress, TimeStamp);
+                return String.Format("{1}: {0}? @{2}", Name, Address, TimeStamp);
             }
         }
     }

@@ -10,12 +10,16 @@
         -->
         <notifyBy NotifyProvider="Telegram">432321123</notifyBy>
         <notifyItems>
+          <notifyVariable Name="Var Test2" IseId="6483" IsImportant="true" />
+          <notifyVariable Name="Var Test3" IseId="6578" IsImportant="false" />
+          <notifyVariable Name="Var Modus" IseId="5173" IsImportant="false" />
+          <notifyVariable Name="Var FLM" IseId="3673" IsImportant="false" />
           <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
           <notifyItem Scope="Raum 1" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
             <conditions>
               <varCondition IseId="950" ConditionMatchValue="false" />
             </conditions>
-          </notifyItem>
+          </notifyItem>          
           <notifyItem Scope="Raum 2" Name="Tür" DeviceAddress="LEQ1468091" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
             <conditions>
               <devCondition DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" ConditionMatchValue="false" />

@@ -49,7 +49,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                     notification.Scope,
                                     notification.Name,
                                     notification.DataPoint.Value,
-                                    notification.DeviceAddress,
+                                    notification.Address,
                                     (notification.NotificationSent ? String.Empty : "not ")) + Environment.NewLine;
                             }
                         }
