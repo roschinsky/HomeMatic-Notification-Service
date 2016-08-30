@@ -44,11 +44,25 @@ namespace TRoschinsky.Service.HomeMaticNotification
                         {
                             if (notification.TimeStamp >= lastQueryTime)
                             {
+                                string detailsValue = String.Empty;
+                                if(notification.DataPoint != null)
+                                {
+                                    detailsValue = String.Concat(notification.DataPoint.Value);
+                                }
+                                else if(notification.Variable != null)
+                                {
+                                    detailsValue = String.Concat(notification.Variable.Value);
+                                }
+                                else
+                                {
+                                    detailsValue = "UNKNOWN";
+                                }
+
                                 richTextBoxEvents.Text += String.Format("{0} - {2} @ {1}: {3} was {5}pushed ({4})",
                                     notification.TimeStamp,
-                                    notification.Scope,
+                                    notification.Scope != null ? notification.Scope : "SysVar",
                                     notification.Name,
-                                    notification.DataPoint.Value,
+                                    detailsValue,
                                     notification.Address,
                                     (notification.NotificationSent ? String.Empty : "not ")) + Environment.NewLine;
                             }
@@ -80,20 +94,38 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     {
                         ListViewItem item = null;
 
-                        if (notifyItem.LastNotification != null && notifyItem.LastNotification.DataPoint != null)
+                        if (notifyItem.LastNotification != null)
                         {
-                            item = new ListViewItem(notifyItem.DeviceAddress);
-                            item.Tag = notifyItem;
-                            item.SubItems.Add(notifyItem.Scope);
-                            item.SubItems.Add(notifyItem.Name);
-                            item.SubItems.Add(notifyItem.IsImportant ? "VIP" : "Normal");
-                            item.SubItems.Add(String.Format("{0} ({1})", notifyItem.IsSilenceTime ? "zZZ" : "Send", notifyItem.SilenceTimes.Length));
-                            item.SubItems.Add(String.Concat(notifyItem.Conditions.Length));
-                            item.SubItems.Add(notifyItem.PreventNotificationStatus);
-                            item.SubItems.Add(notifyItem.LastNotification.TimeStamp.ToString());
-                            item.SubItems.Add(notifyItem.LastNotification.DataPoint.ValueString);
-                            item.SubItems.Add(notifyItem.LastNotification.NotificationSent.ToString());
-                            item.SubItems.Add(String.Concat(notifyItem.SendNotificationTo));
+                            if (notifyItem.LastNotification.DataPoint != null)
+                            {
+                                item = new ListViewItem(notifyItem.DeviceAddress);
+                                item.Tag = notifyItem;
+                                item.SubItems.Add(notifyItem.Scope);
+                                item.SubItems.Add(notifyItem.Name);
+                                item.SubItems.Add(notifyItem.IsImportant ? "VIP" : "Normal");
+                                item.SubItems.Add(String.Format("{0} ({1})", notifyItem.IsSilenceTime ? "zZZ" : "Send", notifyItem.SilenceTimes.Length));
+                                item.SubItems.Add(String.Concat(notifyItem.Conditions.Length));
+                                item.SubItems.Add(notifyItem.PreventNotificationStatus);
+                                item.SubItems.Add(notifyItem.LastNotification.TimeStamp.ToString());
+                                item.SubItems.Add(notifyItem.LastNotification.DataPoint.ValueString);
+                                item.SubItems.Add(notifyItem.LastNotification.NotificationSent.ToString());
+                                item.SubItems.Add(String.Concat(notifyItem.SendNotificationTo));
+                            }
+                            else if(notifyItem.LastNotification.Variable != null)
+                            {
+                                item = new ListViewItem(notifyItem.VariableId.ToString());
+                                item.Tag = notifyItem;
+                                item.SubItems.Add("SysVar");
+                                item.SubItems.Add(notifyItem.Name);
+                                item.SubItems.Add(notifyItem.IsImportant ? "VIP" : "Normal");
+                                item.SubItems.Add(String.Format("{0} ({1})", notifyItem.IsSilenceTime ? "zZZ" : "Send", notifyItem.SilenceTimes.Length));
+                                item.SubItems.Add(String.Concat(notifyItem.Conditions.Length));
+                                item.SubItems.Add(notifyItem.PreventNotificationStatus);
+                                item.SubItems.Add(notifyItem.LastNotification.TimeStamp.ToString());
+                                item.SubItems.Add(notifyItem.LastNotification.Variable.ValueString);
+                                item.SubItems.Add(notifyItem.LastNotification.NotificationSent.ToString());
+                                item.SubItems.Add(String.Concat(notifyItem.SendNotificationTo));
+                            }
                         }
                         else
                         {

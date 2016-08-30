@@ -8,12 +8,12 @@
         <notifyBy NotifyProvider="Pushalot">4c246115ca8848a8a87d63b0f9885a96</notifyBy>
         <notifyBy NotifyProvider="Email">win@halnet.selfip.org</notifyBy>
         -->
-        <notifyBy NotifyProvider="Telegram">432321123</notifyBy>
+        <notifyBy NotifyProvider="Telegram">12345678</notifyBy>
         <notifyItems>
-          <notifyVariable Name="Var Test2" IseId="6483" IsImportant="true" />
-          <notifyVariable Name="Var Test3" IseId="6578" IsImportant="false" />
-          <notifyVariable Name="Var Modus" IseId="5173" IsImportant="false" />
-          <notifyVariable Name="Var FLM" IseId="3673" IsImportant="false" />
+          <notifyVariable Name="Test2" IseId="6483" IsImportant="true" />
+          <notifyVariable Name="Test3" IseId="6578" IsImportant="false" />
+          <notifyVariable Name="Modus" IseId="5173" IsImportant="false" />
+          <notifyVariable Name="FLM" IseId="3673" IsImportant="false" />          
           <notifyItem Scope="Raum 1" Name="Fenster" DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" IsImportant="true" QueryIntervallSeconds="2" />
           <notifyItem Scope="Raum 1" Name="Bewegungsmelder" DeviceAddress="LEQ0412714" DeviceChannel="1" ValueKey="MOTION" IsImportant="false" IsSilent="true" PreventNotificationStatus="false" >
             <conditions>
@@ -25,7 +25,7 @@
               <devCondition DeviceAddress="LEQ0503523" DeviceChannel="1" ValueKey="STATE" ConditionMatchValue="false" />
             </conditions>
           </notifyItem>
-          <notifyItem Scope="Raum 2" Name="Tester" DeviceAddress="LEQ1468026" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
+          <notifyItem Scope="Raum 2" Name="Test-Sensor" DeviceAddress="LEQ1468026" DeviceChannel="1" ValueKey="STATE" IsImportant="true" >
             <silenceTimes>
               <silence Day="Saturday" Start="08:30" End="21:00" />
               <silence Day="Sunday" Start="09:00" End="20:30" />

@@ -100,7 +100,14 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
         public override string ToString()
         {
-            return String.Format("Notify-{3} in {0}: {1} - {2}", Scope, Name, LastNotification, HMNotifyType);
+            if (HMNotifyType == ItemType.Device)
+            {
+                return String.Format("Notify-{3} in {0}: {1} - {2}", Scope, Name, LastNotification, HMNotifyType);
+            }
+            else
+            {
+                return String.Format("Notify-{2}: {0} - {1}", Name, LastNotification, HMNotifyType);
+            }
         }
     }
 }

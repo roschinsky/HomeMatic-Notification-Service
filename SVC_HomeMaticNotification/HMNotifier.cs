@@ -211,9 +211,10 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                 notifyItems[i].LastNotification = currentNotification;
                             }
                             // ...or checks for a change in status of the current notify item
-                            else if (notifyItems[i].LastNotification.DataPoint.ValueString != null
-                                && currentNotification.DataPoint.ValueString != null
-                                && notifyItems[i].LastNotification.DataPoint.ValueString != currentNotification.DataPoint.ValueString)
+                            //else if (notifyItems[i].LastNotification.DataPoint.ValueString != null
+                            //    && currentNotification.DataPoint.ValueString != null
+                            //    && notifyItems[i].LastNotification.DataPoint.ValueString != currentNotification.DataPoint.ValueString)
+                            else if (WasChangedSinceLastCheck(notifyItems[i].LastNotification, currentNotification))
                             {
                                 notifyItems[i].LastNotification = currentNotification;
 
@@ -273,7 +274,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                     else
                                     {
                                         // send a message by the specified notification destination
-                                        currentNotification.NotificationSent = SendNotification(currentNotification, destination, notifyItems[i].IsImportant, notifyItems[i].IsSilent);
+                                        currentNotification.NotificationSent = SendNotification(currentNotification, destination, notifyItems[i].IsImportant, notifyItems[i].IsSilent, NotifyItems[i].HMNotifyType);
                                     }
                                 }
 
@@ -293,6 +294,36 @@ namespace TRoschinsky.Service.HomeMaticNotification
             {
                 errors.Add(ex);
             }
+        }
+
+        private bool WasChangedSinceLastCheck(HMNotification lastNotification, HMNotification currentNotification)
+        {
+            try
+            {
+                // Check for changed device status
+                if (currentNotification.DataPoint != null
+                    && lastNotification.DataPoint.ValueString != null
+                    && currentNotification.DataPoint.ValueString != null
+                    && lastNotification.DataPoint.ValueString != currentNotification.DataPoint.ValueString)
+                {
+                    return true;
+                }
+
+                // Check for changed variable status
+                if (currentNotification.Variable != null
+                    && lastNotification.Variable.ValueString != null
+                    && currentNotification.Variable.ValueString != null
+                    && lastNotification.Variable.ValueString != currentNotification.Variable.ValueString)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                errors.Add(ex);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -323,30 +354,57 @@ namespace TRoschinsky.Service.HomeMaticNotification
         /// <param name="destination"></param>
         /// <param name="isImportant"></param>
         /// <param name="isSilent"></param>
-        private bool SendNotification(HMNotification notification, HMNotifyDestination destination, bool isImportant, bool isSilent)
+        private bool SendNotification(HMNotification notification, HMNotifyDestination destination, bool isImportant, bool isSilent, HMNotifyItem.ItemType notifyType)
         {
             try
             {
-                string title = String.Format("{0} - {2}: {1}", pushTitle, notification.Name, notification.Scope);
+                string title = String.Format("{0} - {2}: {1}", pushTitle, notification.Name, notifyType == HMNotifyItem.ItemType.Device ? notification.Scope : "System Variable");
+                string message = String.Empty;
 
-                string channelDetails = String.Empty;
-                HMDeviceChannel channel = hmWrapper.GetChannelByAddress(notification.Address);
-                if (channel != null)
+                if (notifyType == HMNotifyItem.ItemType.Device)
                 {
-                    channelDetails = String.Format("** Details '{0}' **\n", channel.Name);
-                    foreach (KeyValuePair<string, HMDeviceDataPoint> dataPoint in channel.DataPoints)
+                    string channelDetails = String.Empty;
+                    HMDeviceChannel channel = hmWrapper.GetChannelByAddress(notification.Address);
+                    if (channel != null)
                     {
-                        channelDetails += String.Format("{0}: {1}\n", dataPoint.Key, dataPoint.Value);
+                        channelDetails = String.Format("** Details '{0}' **\n", channel.Name);
+                        foreach (KeyValuePair<string, HMDeviceDataPoint> dataPoint in channel.DataPoints)
+                        {
+                            channelDetails += String.Format("{0}: {1}\n", dataPoint.Key, dataPoint.Value);
+                        }
                     }
-                }
 
-                string message = String.Format("Ereignis in {0} für {1} mit Status '{2}' eingetreten.\nAusgelöst um: '{3}'\nSensor/Aktor: {4}\n\n{5}", 
-                                        notification.Scope, 
-                                        notification.Name, 
-                                        notification.DataPoint.Value, 
-                                        notification.TimeStamp,
-                                        notification.Address, 
-                                        channelDetails);
+                    message = String.Format("Ereignis in {0} für {1} mit Status '{2}' eingetreten.\nAusgelöst um: '{3}'\nSensor/Aktor: {4}\n\n{5}",
+                                            notification.Scope,
+                                            notification.Name,
+                                            notification.DataPoint.Value,
+                                            notification.TimeStamp,
+                                            notification.Address,
+                                            channelDetails);
+                }
+                else if(notifyType == HMNotifyItem.ItemType.Variable)
+                {
+                    string variableDetails = String.Empty;
+                    HMSystemVariable sysVar = notification.Variable;
+                    if (sysVar != null)
+                    {
+                        variableDetails = String.Format("** Details '{0}' **\n", sysVar.Name);
+                        variableDetails += String.Format("VALUE: {0}\n", sysVar.ValueDescription);
+                        variableDetails += String.Format("VALUE-TYPE: {0}\n", sysVar.ValueType);
+                        variableDetails += String.Format("VALUE-UNIT: {0}\n", sysVar.ValueUnit);
+                    }
+
+                    message = String.Format("Variable {0} auf Status '{1}' geändert.\nGeändert um: '{2}'\nInterne Variablen-ID #{3}\n\n{4}",
+                                            notification.Name,
+                                            notification.Variable.Value,
+                                            notification.TimeStamp,
+                                            notification.Address,
+                                            variableDetails);
+                }
+                else
+                {
+                    message = notification.ToString();
+                }
 
                 Notification notify = null;
 
@@ -494,7 +552,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                             {
                                                 HMNotifyItem hmNotifyItem = null;
 
-                                                if (hmItemXml.Attributes.GetNamedItem("VariableId") != null)
+                                                if (hmItemXml.Name.ToLower() == "notifyvariable" && hmItemXml.Attributes.GetNamedItem("IseId") != null)
                                                 {
                                                     hmNotifyItem = new HMNotifyItem()
                                                     {
@@ -502,7 +560,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                                         Name = hmItemXml.Attributes["Name"].Value
                                                     };
                                                 }
-                                                else
+                                                else if (hmItemXml.Name.ToLower() == "notifyitem" && hmItemXml.Attributes.GetNamedItem("DeviceAddress") != null)
                                                 {
                                                     hmNotifyItem = new HMNotifyItem()
                                                     {
