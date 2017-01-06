@@ -48,7 +48,7 @@ namespace SVC_HomeMaticNotification
                 InitializeComponent();
 
                 queryTimer = new System.Timers.Timer();
-                double interval = Double.Parse(Properties.Settings.Default.NotifierQueryTimerSec);
+                double interval = Convert.ToDouble(Properties.Settings.Default.NotifierQueryTimerSec);
                 if (interval < 2 || interval > 120)
                 {
                     queryTimer.Interval = 2000;
@@ -60,7 +60,7 @@ namespace SVC_HomeMaticNotification
                 queryTimer.Elapsed += queryTimer_Elapsed;
 
                 reconnectTimer = new System.Timers.Timer();
-                reconnectTimer.Interval = Double.Parse(Properties.Settings.Default.NotifierReconnectTimerSec) * 1000;
+                reconnectTimer.Interval = Convert.ToDouble(Properties.Settings.Default.NotifierReconnectTimerSec) * 1000;
                 reconnectTimer.Elapsed += reconnectTimer_Elapsed;
             }
             catch(Exception)
@@ -100,12 +100,13 @@ namespace SVC_HomeMaticNotification
                 HMNotifierConfig config = new HMNotifierConfig() {
                     HmcUrl = String.Format("{0}", Properties.Settings.Default.HmcUrl.TrimEnd('/')),
                     NotifierQueryFullRequestSec = Properties.Settings.Default.NotifierQueryFullRequestSec,
-                    NotifierConfigFile = Properties.Settings.Default.NotifierConfigFile, 
+                    NotifierConfigFile = Properties.Settings.Default.NotifierConfigFile,
                     NotificationSmtpHost = Properties.Settings.Default.NotificationSmtpHost,
                     NotificationSmtpPort = Properties.Settings.Default.NotificationSmtpPort,
                     NotificationSmtpCredUser = Properties.Settings.Default.NotificationSmtpCredUser,
                     NotificationSmtpCredPw = Properties.Settings.Default.NotificationSmtpCredPw,
-                    NotificationSmtpMailFrom = Properties.Settings.Default.NotificationSmtpMailFrom
+                    NotificationSmtpMailFrom = Properties.Settings.Default.NotificationSmtpMailFrom,
+                    NotificationSmtpUseSSL = Properties.Settings.Default.NotificationSmtpUseSSL
                 };
 
                 notifier = new HMNotifier(config);

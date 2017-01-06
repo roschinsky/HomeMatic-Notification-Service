@@ -167,10 +167,10 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     HMNotifierConfig config = new HMNotifierConfig()
                     {
                         HmcUrl = txtUrl.Text,
-                        NotifierQueryFullRequestSec = "10",
+                        NotifierQueryFullRequestSec = 10,
                         NotifierConfigFile = Properties.Settings.Default.NotifierConfigFile,
                         NotificationSmtpHost = Properties.Settings.Default.NotificationSmtpHost,
-                        NotificationSmtpPort = Properties.Settings.Default.NotificationSmtpPort,
+                        NotificationSmtpPort = int.Parse(Properties.Settings.Default.NotificationSmtpPort),
                         NotificationSmtpMailFrom = Properties.Settings.Default.NotificationSmtpMailFrom
                     };
 

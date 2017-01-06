@@ -10,11 +10,12 @@ namespace TRoschinsky.Service.HomeMaticNotification
     {
         public string NotifierConfigFile { get; set; }
         public string HmcUrl { get; set; }
-        public string NotifierQueryFullRequestSec { get; set; }
+        public int NotifierQueryFullRequestSec { get; set; }
         public string NotificationSmtpHost { get; set; }
-        public string NotificationSmtpPort { get; set; }
+        public int NotificationSmtpPort { get; set; }
         public string NotificationSmtpCredUser { get; set; }
         public string NotificationSmtpCredPw { get; set; }
         public string NotificationSmtpMailFrom { get; set; }
+        public bool NotificationSmtpUseSSL { get; set; }
     }
 }

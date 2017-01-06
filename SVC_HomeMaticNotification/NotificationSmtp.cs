@@ -17,7 +17,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             set { source = value; }
         }
         public string Link { get; set; }
-        public Tuple<string, string, string, string, string> SmtpConfig { get; set; }
+        public Tuple<string, int, string, string, string, bool> SmtpConfig { get; set; }
 
         public NotificationSmtp(string mailAddress, string message, string subject)
             : base(mailAddress, message, subject)
@@ -43,13 +43,9 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 using (var client = new SmtpClient(SmtpConfig.Item1))
                 {
                     // Setup port if set
-                    if(!String.IsNullOrWhiteSpace(SmtpConfig.Item2))
+                    if(SmtpConfig.Item2 > 0 && SmtpConfig.Item2 != 25 && SmtpConfig.Item2 < 65536)
                     {
-                        client.Port = int.Parse(SmtpConfig.Item2);
-                    }
-                    else
-                    {
-                        client.Port = 25;
+                        client.Port = SmtpConfig.Item2;
                     }
 
                     // Setup credentials if set
@@ -57,6 +53,12 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     {
                         client.UseDefaultCredentials = false;
                         client.Credentials = new NetworkCredential(SmtpConfig.Item3, SmtpConfig.Item4);
+                    }
+
+                    // Setup SSL if needed
+                    if(SmtpConfig.Item6)
+                    {
+                        client.EnableSsl = true;
                     }
 
                     client.DeliveryMethod = SmtpDeliveryMethod.Network;

@@ -50,9 +50,9 @@ namespace SVC_HomeMaticNotification.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("300")]
-        public string NotifierReconnectTimerSec {
+        public int NotifierReconnectTimerSec {
             get {
-                return ((string)(this["NotifierReconnectTimerSec"]));
+                return ((int)(this["NotifierReconnectTimerSec"]));
             }
             set {
                 this["NotifierReconnectTimerSec"] = value;
@@ -74,9 +74,9 @@ namespace SVC_HomeMaticNotification.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public string NotifierQueryTimerSec {
+        public int NotifierQueryTimerSec {
             get {
-                return ((string)(this["NotifierQueryTimerSec"]));
+                return ((int)(this["NotifierQueryTimerSec"]));
             }
             set {
                 this["NotifierQueryTimerSec"] = value;
@@ -86,9 +86,9 @@ namespace SVC_HomeMaticNotification.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public string NotifierQueryFullRequestSec {
+        public int NotifierQueryFullRequestSec {
             get {
-                return ((string)(this["NotifierQueryFullRequestSec"]));
+                return ((int)(this["NotifierQueryFullRequestSec"]));
             }
             set {
                 this["NotifierQueryFullRequestSec"] = value;
@@ -110,9 +110,9 @@ namespace SVC_HomeMaticNotification.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("587")]
-        public string NotificationSmtpPort {
+        public int NotificationSmtpPort {
             get {
-                return ((string)(this["NotificationSmtpPort"]));
+                return ((int)(this["NotificationSmtpPort"]));
             }
             set {
                 this["NotificationSmtpPort"] = value;
@@ -152,6 +152,18 @@ namespace SVC_HomeMaticNotification.Properties {
             }
             set {
                 this["NotificationSmtpMailFrom"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotificationSmtpUseSSL {
+            get {
+                return ((bool)(this["NotificationSmtpUseSSL"]));
+            }
+            set {
+                this["NotificationSmtpUseSSL"] = value;
             }
         }
     }
