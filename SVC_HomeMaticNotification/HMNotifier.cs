@@ -22,7 +22,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
         private string pushSource = String.Empty;
         private string pushTitle = "HMC";
         private string configFileName = String.Empty;
-        private Tuple<string, string, string, string, string> mailConfig;
+        private Tuple<string, int, string, string, string, bool> mailConfig;
 
         private HMApiWrapper hmWrapper;
         private BackgroundWorker bgwGetEvents;
@@ -50,14 +50,14 @@ namespace TRoschinsky.Service.HomeMaticNotification
         /// </summary>
         /// <param name="ccuUrl">The URL to the Homematic CCU2</param>
         /// <param name="delayTillNextFullReqeust">Time intervall in seconds until a full scan should be executed</param>
-        public HMNotifier(string ccuUrl, string delayTillNextFullReqeust, string configFile)
+        public HMNotifier(string ccuUrl, int delayTillNextFullReqeust, string configFile)
         {
             hmWrapper = null;
             pushSource = ccuUrl;
             configFileName = configFile;
             WorkerRunCount = WorkerTriggeredCount = 0;
 
-            delayFullReqeusts = new TimeSpan(0, 0, int.Parse(delayTillNextFullReqeust));
+            delayFullReqeusts = new TimeSpan(0, 0, delayTillNextFullReqeust);
 
             Tuple<List<HMNotifyDestination>, List<HMNotifyItem>> config = ReadConfig();
             notifyDestinations = config.Item1;
@@ -90,12 +90,13 @@ namespace TRoschinsky.Service.HomeMaticNotification
         public HMNotifier(HMNotifierConfig config) 
             : this(config.HmcUrl, config.NotifierQueryFullRequestSec, config.NotifierConfigFile)
         {
-            mailConfig = new Tuple<string, string, string, string, string>(
+            mailConfig = new Tuple<string, int, string, string, string, bool>(
                 config.NotificationSmtpHost,
                 config.NotificationSmtpPort,
                 config.NotificationSmtpCredUser,
                 config.NotificationSmtpCredPw,
-                config.NotificationSmtpMailFrom);
+                config.NotificationSmtpMailFrom,
+                config.NotificationSmtpUseSSL);
         }
 
         /// <summary>

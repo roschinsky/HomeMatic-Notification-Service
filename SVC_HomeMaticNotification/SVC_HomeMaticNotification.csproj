@@ -33,9 +33,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LIB_HomeMaticXmlApi, Version=1.1.5805.39008, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\HomeMaticXmlApi\LIB_HomeMaticXmlApi\bin\Release\LIB_HomeMaticXmlApi.dll</HintPath>
+    <Reference Include="LIB_HomeMaticXmlApi">
+      <HintPath>..\..\HomeMatic-XmlApi-Lib\LIB_HomeMaticXmlApi\bin\Release\LIB_HomeMaticXmlApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />

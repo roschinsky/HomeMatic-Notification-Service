@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LIB_HomeMaticXmlApi">
-      <HintPath>..\..\HomeMaticXmlApi\LIB_HomeMaticXmlApi\bin\Release\LIB_HomeMaticXmlApi.dll</HintPath>
+      <HintPath>..\..\HomeMatic-XmlApi-Lib\LIB_HomeMaticXmlApi\bin\Release\LIB_HomeMaticXmlApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

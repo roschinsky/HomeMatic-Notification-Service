@@ -40,32 +40,32 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     // Check for events recorded since last execution and adds them to a textbox
                     if (notifier.Notifications.Length > 0)
                     {
+                        richTextBoxEvents.Clear();
+
                         foreach (HMNotification notification in notifier.Notifications)
                         {
-                            if (notification.TimeStamp >= lastQueryTime)
-                            {
-                                string detailsValue = String.Empty;
-                                if(notification.DataPoint != null)
-                                {
-                                    detailsValue = String.Concat(notification.DataPoint.Value);
-                                }
-                                else if(notification.Variable != null)
-                                {
-                                    detailsValue = String.Concat(notification.Variable.Value);
-                                }
-                                else
-                                {
-                                    detailsValue = "UNKNOWN";
-                                }
 
-                                richTextBoxEvents.Text += String.Format("{0} - {2} @ {1}: {3} was {5}pushed ({4})",
-                                    notification.TimeStamp,
-                                    notification.Scope != null ? notification.Scope : "SysVar",
-                                    notification.Name,
-                                    detailsValue,
-                                    notification.Address,
-                                    (notification.NotificationSent ? String.Empty : "not ")) + Environment.NewLine;
+                            string detailsValue = String.Empty;
+                            if (notification.DataPoint != null)
+                            {
+                                detailsValue = String.Concat(notification.DataPoint.Value);
                             }
+                            else if (notification.Variable != null)
+                            {
+                                detailsValue = String.Concat(notification.Variable.Value);
+                            }
+                            else
+                            {
+                                detailsValue = "UNKNOWN";
+                            }
+
+                            richTextBoxEvents.Text += String.Format("{0} - {2} @ {1}: {3} was {5}pushed ({4})",
+                                notification.TimeStamp,
+                                notification.Scope != null ? notification.Scope : "SysVar",
+                                notification.Name,
+                                detailsValue,
+                                notification.Address,
+                                (notification.NotificationSent ? String.Empty : "not ")) + Environment.NewLine;
                         }
                     }
 
@@ -167,10 +167,10 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     HMNotifierConfig config = new HMNotifierConfig()
                     {
                         HmcUrl = txtUrl.Text,
-                        NotifierQueryFullRequestSec = "10",
+                        NotifierQueryFullRequestSec = 10,
                         NotifierConfigFile = Properties.Settings.Default.NotifierConfigFile,
                         NotificationSmtpHost = Properties.Settings.Default.NotificationSmtpHost,
-                        NotificationSmtpPort = Properties.Settings.Default.NotificationSmtpPort,
+                        NotificationSmtpPort = String.IsNullOrEmpty(Properties.Settings.Default.NotificationSmtpPort) ? 25 : int.Parse(Properties.Settings.Default.NotificationSmtpPort),
                         NotificationSmtpMailFrom = Properties.Settings.Default.NotificationSmtpMailFrom
                     };
 

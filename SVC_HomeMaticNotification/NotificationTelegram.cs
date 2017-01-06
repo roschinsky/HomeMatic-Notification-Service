@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace TRoschinsky.Service.HomeMaticNotification
@@ -51,6 +54,9 @@ namespace TRoschinsky.Service.HomeMaticNotification
         {
             try
             {
+                ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
                 using (var client = new WebClient())
                 {
                     NameValueCollection payload = new NameValueCollection();
@@ -74,14 +80,25 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch (WebException exWeb)
             {
-                using (StreamReader reader = new StreamReader(exWeb.Response.GetResponseStream()))
+                if(exWeb.Response != null)
                 {
-                    NotificationWebResponse = reader.ReadToEnd();
+                    using (StreamReader reader = new StreamReader(exWeb.Response.GetResponseStream()))
+                    {
+                        NotificationWebResponse = reader.ReadToEnd();
+                    }
+                }
+                else
+                {
+                    NotificationWebResponse = exWeb.Message;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement error handling
+                NotificationWebResponse = ex.Message;
+            }
+            finally
+            {
+                ServicePointManager.ServerCertificateValidationCallback -= ValidateCertificate;
             }
 
             NotificationSuccessfulSend = false;
@@ -114,5 +131,23 @@ namespace TRoschinsky.Service.HomeMaticNotification
 
             return result;
         }
+
+        #region Helper
+
+        /// <summary>
+        /// Certificate validation
+        /// </summary>
+        private bool ValidateCertificate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors error)
+        {
+            // if certificate is invalid, log error and return false
+            if (error == SslPolicyErrors.None)
+            {
+                Debug.WriteLine("Certificate '{0}' policy error: '{1}'", cert.Subject, error);
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }
