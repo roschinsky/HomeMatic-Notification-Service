@@ -95,16 +95,17 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     client.Send(payload);
                 }
 
+                Log.Add(new Common.JournalEntry(String.Format("Notification was send to '{0}'.", rcpt), this.GetType().Name));
                 NotificationSuccessfulSend = true;
                 return true;
             }
             catch (SmtpException exMail)
             {
-                NotificationWebResponse = exMail.StatusCode.ToString();
+                Log.Add(new Common.JournalEntry(String.Format("Notification failed by server with code '{0}'.", exMail.StatusCode), this.GetType().Name, exMail));
             }
             catch (Exception ex)
             {
-                NotificationWebResponse = String.Format("Unexpected error: {0}", ex.Message);
+                Log.Add(new Common.JournalEntry("Notification failed unexpectedly.", this.GetType().Name, ex));
             }
 
             NotificationSuccessfulSend = false;

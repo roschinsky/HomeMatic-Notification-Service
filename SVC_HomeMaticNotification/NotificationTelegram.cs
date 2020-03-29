@@ -71,10 +71,11 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     byte[] response = client.UploadValues(apiUrl, "POST", payload);
                     using (StreamReader reader = new StreamReader(new MemoryStream(response)))
                     {
-                        NotificationWebResponse = reader.ReadToEnd();
+                        NotificationResponse = reader.ReadToEnd();
                     }
                 }
 
+                Log.Add(new Common.JournalEntry(String.Format("Notification was send to '{0}'.", rcpt), this.GetType().Name));
                 NotificationSuccessfulSend = true;
                 return true;
             }
@@ -84,17 +85,18 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 {
                     using (StreamReader reader = new StreamReader(exWeb.Response.GetResponseStream()))
                     {
-                        NotificationWebResponse = reader.ReadToEnd();
+                        NotificationResponse = reader.ReadToEnd();
                     }
                 }
                 else
                 {
-                    NotificationWebResponse = exWeb.Message;
+                    NotificationResponse = exWeb.Message;
                 }
+                Log.Add(new Common.JournalEntry("Notification failed: " + NotificationResponse, this.GetType().Name, exWeb));
             }
             catch (Exception ex)
             {
-                NotificationWebResponse = ex.Message;
+                Log.Add(new Common.JournalEntry("Notification failed: " + NotificationResponse, this.GetType().Name, ex));
             }
             finally
             {
@@ -124,9 +126,9 @@ namespace TRoschinsky.Service.HomeMaticNotification
                 string checks = String.Format("```{0}```", message.Substring(endOfFirstLine, startOfLastLine - endOfFirstLine));
                 result += checks;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement error handling
+                Log.Add(new Common.JournalEntry("Formatting message failed.", this.GetType().Name, ex));
             }
 
             return result;
@@ -140,9 +142,9 @@ namespace TRoschinsky.Service.HomeMaticNotification
         private bool ValidateCertificate(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors error)
         {
             // if certificate is invalid, log error and return false
-            if (error == SslPolicyErrors.None)
+            if (error != SslPolicyErrors.None)
             {
-                Debug.WriteLine("Certificate '{0}' policy error: '{1}'", cert.Subject, error);
+                Log.Add(new Common.JournalEntry(String.Format("Certificate '{0}' policy error: '{1}'", cert.Subject, error), this.GetType().Name, true));
                 return false;
             }
             return true;

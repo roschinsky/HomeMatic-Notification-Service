@@ -148,6 +148,7 @@
             this.richTextBoxLog.Size = new System.Drawing.Size(359, 65);
             this.richTextBoxLog.TabIndex = 0;
             this.richTextBoxLog.Text = "";
+            this.richTextBoxLog.WordWrap = false;
             // 
             // listViewDevices
             // 
@@ -166,6 +167,7 @@
             this.colHead9,
             this.colHead10,
             this.colHead11});
+            this.listViewDevices.HideSelection = false;
             this.listViewDevices.Location = new System.Drawing.Point(3, 21);
             this.listViewDevices.Name = "listViewDevices";
             this.listViewDevices.Size = new System.Drawing.Size(359, 172);

@@ -54,23 +54,32 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     byte[] response = client.UploadValues(apiUrl, payload);
                     using (StreamReader reader = new StreamReader(new MemoryStream(response)))
                     {
-                        NotificationWebResponse = reader.ReadToEnd();
+                        NotificationResponse = reader.ReadToEnd();
                     }
                 }
 
+                Log.Add(new Common.JournalEntry(String.Format("Notification was send to '{0}'.", rcpt), this.GetType().Name));
                 NotificationSuccessfulSend = true;
                 return true;
             }
             catch (WebException exWeb)
             {
-                using (StreamReader reader = new StreamReader(exWeb.Response.GetResponseStream()))
+                if (exWeb.Response != null)
                 {
-                    NotificationWebResponse = reader.ReadToEnd();
+                    using (StreamReader reader = new StreamReader(exWeb.Response.GetResponseStream()))
+                    {
+                        NotificationResponse = reader.ReadToEnd();
+                    }
                 }
+                else
+                {
+                    NotificationResponse = exWeb.Message;
+                }
+                Log.Add(new Common.JournalEntry("Notification failed: " + NotificationResponse, this.GetType().Name, exWeb));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Implement error handling
+                Log.Add(new Common.JournalEntry("Notification failed: " + NotificationResponse, this.GetType().Name, ex));
             }
 
             NotificationSuccessfulSend = false;

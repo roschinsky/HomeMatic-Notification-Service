@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.ServiceProcess;
 using System.Threading;
 using System.Timers;
+using TRoschinsky.Common;
 using TRoschinsky.Service.HomeMaticNotification;
 
 namespace SVC_HomeMaticNotification
@@ -95,7 +96,7 @@ namespace SVC_HomeMaticNotification
         {
             try
             {
-                Exception[] errors = null;
+                JournalEntry[] log = null;
 
                 HMNotifierConfig config = new HMNotifierConfig() {
                     HmcUrl = String.Format("{0}", Properties.Settings.Default.HmcUrl.TrimEnd('/')),
@@ -128,13 +129,26 @@ namespace SVC_HomeMaticNotification
 
                 if (notifier != null)
                 {
-                    errors = notifier.GetRecentErrors();
-                    if (errors != null && errors.Length > 0)
+                    log = notifier.GetRecentErrors();
+                    if (log != null && log.Length > 0)
                     {
                         EventLog.WriteEntry(eventLogSource, "Some errors occured within notifier instance...", EventLogEntryType.Warning);
-                        foreach (Exception error in errors)
+                        foreach (JournalEntry entry in log)
                         {
-                            EventLog.WriteEntry(eventLogSource, error.Message, EventLogEntryType.Error);
+                            switch(entry.EntryType)
+                            {
+                                case "INF":
+                                    EventLog.WriteEntry(eventLogSource, entry.Message, EventLogEntryType.Information);
+                                    break;
+
+                                case "WRN":
+                                    EventLog.WriteEntry(eventLogSource, entry.Message, EventLogEntryType.Warning);
+                                    break;
+
+                                case "ERR":
+                                    EventLog.WriteEntry(eventLogSource, entry.Message, EventLogEntryType.Error);
+                                    break;
+                            }
                         }
                     }
                 }
@@ -178,24 +192,37 @@ namespace SVC_HomeMaticNotification
                 {
                     notifier.CollectEvents();
 
-                    Exception[] errors = notifier.GetRecentErrors();
-                    if (errors != null && errors.Length > 0)
+                    JournalEntry[] log = notifier.GetRecentErrors();
+                    if (log != null && log.Length > 0)
                     {
                         EventLog.WriteEntry(eventLogSource, "Some errors occured while query timer fired...", EventLogEntryType.Warning);
-                        foreach (Exception error in errors)
+                        foreach (JournalEntry entry in log)
                         {
                             try
                             {
-                                string messageDetails = String.Format("*** Exception type: {0}\n*** Message: {1}\n\n", error.GetType().Name, error.Message);
-                                if (error.InnerException != null)
+                                switch (entry.EntryType)
                                 {
-                                    messageDetails += String.Format("*** Inner exception type: {0}\n*** Message: {1}\n\n", error.GetType().Name, error.Message);
-                                    if (!String.IsNullOrWhiteSpace(error.InnerException.StackTrace))
-                                    {
-                                        messageDetails += String.Format("- Inner stack trace: {0}", error.InnerException.StackTrace);
-                                    }
-                                }
-                                EventLog.WriteEntry(eventLogSource, messageDetails, EventLogEntryType.Error);
+                                    case "INF":
+                                        EventLog.WriteEntry(eventLogSource, entry.ToString(), EventLogEntryType.Information);
+                                        break;
+
+                                    case "WRN":
+                                        EventLog.WriteEntry(eventLogSource, entry.ToString(), EventLogEntryType.Warning);
+                                        break;
+
+                                    case "ERR":
+                                        string messageDetails = String.Format("*** Exception type: {0}\n*** Message: {1}\n\n", entry.GetType().Name, entry.Message);
+                                        if (entry.Error.InnerException != null)
+                                        {
+                                            messageDetails += String.Format("*** Inner exception type: {0}\n*** Message: {1}\n\n", entry.GetType().Name, entry.Message);
+                                            if (!String.IsNullOrWhiteSpace(entry.Error.InnerException.StackTrace))
+                                            {
+                                                messageDetails += String.Format("- Inner stack trace: {0}", entry.Error.InnerException.StackTrace);
+                                            }
+                                        }
+                                        EventLog.WriteEntry(eventLogSource, messageDetails, EventLogEntryType.Error);
+                                        break;
+                                }                                
                             }
                             catch (Exception ex)
                             {

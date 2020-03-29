@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using TRoschinsky.Common;
 
 namespace TRoschinsky.Service.HomeMaticNotification
 {
@@ -15,8 +17,9 @@ namespace TRoschinsky.Service.HomeMaticNotification
         protected string source = "HomeMaticNotification";
         protected bool isImportant;
         protected bool isSilent;
+        public List<JournalEntry> Log = new List<JournalEntry>();
         public bool NotificationSuccessfulSend = false;
-        public string NotificationWebResponse = String.Empty;
+        public string NotificationResponse = String.Empty;
 
 
         public Notification(string rcptTo, string message, string title, bool isImportant, bool isSilent)

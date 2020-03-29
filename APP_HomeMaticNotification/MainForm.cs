@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using TRoschinsky.Common;
 using TRoschinsky.Service.HomeMaticNotification;
 
 namespace TRoschinsky.Service.HomeMaticNotification
@@ -73,19 +74,25 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     lastQueryTime = DateTime.Now;
 
                     // Check for errors recorded within last execution interval and adds them to a textbox
-                    foreach (Exception error in notifier.GetRecentErrors())
+                    foreach (JournalEntry entry in notifier.GetRecentErrors())
                     {
-                        string message = error.Message;
-                        if (error.InnerException != null)
+                        if (entry.EntryType == "ERR")
                         {
-                            message += " [Inner: " + error.InnerException.Message + "];";
+                            string message = entry.ToString();
+                            if (entry.Error.InnerException != null)
+                            {
+                                message += "\n [Inner: " + entry.Error.InnerException.Message + "];";
+                            }
+                            if (entry.Error.StackTrace != null)
+                            {
+                                message += "\n [Stack: " + entry.Error.StackTrace + "];";
+                            }
+                            richTextBoxLog.Text += String.Concat(message, Environment.NewLine);
                         }
-                        if (error.StackTrace != null)
+                        else
                         {
-                            message += " [Stack: " + error.StackTrace + "];";
+                            richTextBoxLog.Text += String.Concat(entry, Environment.NewLine);
                         }
-
-                        richTextBoxLog.Text += message + Environment.NewLine;
                     }
 
                     // Writes current configuration of notifier including results of last notify-execution to a list view
@@ -94,7 +101,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     {
                         ListViewItem item = null;
 
-                        if (notifyItem.LastNotification != null)
+                        if (notifyItem.LastNotification != null && !String.IsNullOrEmpty(notifyItem.DeviceAddress))
                         {
                             if (notifyItem.LastNotification.DataPoint != null)
                             {

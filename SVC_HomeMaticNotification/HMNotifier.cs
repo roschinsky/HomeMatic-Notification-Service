@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using TRoschinsky.Common;
 using TRoschinsky.Lib.HomeMaticXmlApi;
 
 namespace TRoschinsky.Service.HomeMaticNotification
@@ -36,7 +37,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
         public long WorkerRunCount { get; private set; }
         public long WorkerTriggeredCount { get; private set; }
 
-        private List<Exception> errors = new List<Exception>();
+        private List<JournalEntry> log = new List<JournalEntry>();
         private List<HMNotification> notifications = new List<HMNotification>();
         public HMNotification[] Notifications { get { return notifications.ToArray(); } }
         
@@ -114,7 +115,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch (Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Could not start to collect events.", this.GetType().Name, ex));
             }
         }
 
@@ -184,12 +185,12 @@ namespace TRoschinsky.Service.HomeMaticNotification
                             else if(notifyItems[i].HMNotifyType == HMNotifyItem.ItemType.Variable)
                             {
                                 // ask Homematic wrapper for system variable to check for...
-                                HMSystemVariable notifyVariable = hmWrapper.Variables.First(v => v.InternalId == notifyItems[i].VariableId);
+                                HMSystemVariable notifyVariable = hmWrapper.Variables.FirstOrDefault(v => v.InternalId == notifyItems[i].VariableId);
 
-                                // check if system variable was obtained properly; if not throw an error
+                                // check if system variable was obtained properly; if not log an error
                                 if (notifyVariable == null)
                                 {
-                                    throw new HMNException(String.Format("System variable for notify item '{0}' with address {1} could not be checked. Please check configuration!", notifyItems[i].Name, String.Concat(notifyItems[i].VariableId)), null);
+                                    log.Add(new JournalEntry(String.Format("System variable for notify item '{0}' with address {1} could not be checked. Please check configuration!", notifyItems[i].Name, String.Concat(notifyItems[i].VariableId)), true));
                                 }
 
                                 // create new notification variable
@@ -203,7 +204,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                             }
                             else
                             {
-                                throw new HMNException(String.Format("Notify item '{0}' was not properly defined. Please check configuration!", notifyItems[i].Name), null);
+                                log.Add(new JournalEntry(String.Format("Notify item '{0}' was not properly defined. Please check configuration!", notifyItems[i].Name), true));
                             }
 
                             // set last notification of current notify item if it is not set...
@@ -285,7 +286,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     }
                     catch(Exception ex)
                     {
-                        errors.Add(new HMNException(currentnotifyItemName, ex));
+                        log.Add(new Common.JournalEntry("Failed to process notify item: " + currentnotifyItemName, this.GetType().Name, ex));
                     }
                 }
 
@@ -293,7 +294,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch (Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to process notify item at all.", this.GetType().Name, ex));
             }
         }
 
@@ -321,7 +322,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch (Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to compare with last notification state.", this.GetType().Name, ex));
             }
 
             return false;
@@ -344,7 +345,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch (Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Collecting events failed.", this.GetType().Name, ex));
             }
         }
 
@@ -357,6 +358,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
         /// <param name="isSilent"></param>
         private bool SendNotification(HMNotification notification, HMNotifyDestination destination, bool isImportant, bool isSilent, HMNotifyItem.ItemType notifyType)
         {
+            bool result = false;
             try
             {
                 string title = String.Format("{0} - {2}: {1}", pushTitle, notification.Name, notifyType == HMNotifyItem.ItemType.Device ? notification.Scope : "System Variable");
@@ -414,17 +416,17 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     notify = new NotificationPushalot(destination.DestinationAddress, message, title, isImportant, isSilent);
                     ((NotificationPushalot)notify).Link = pushLink;
                     ((NotificationPushalot)notify).Source = destination.Name;
-                    return notify.Send();
+                    result = notify.Send();
                 }
                 else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Pushover)
                 {
                     notify = new NotificationPushover(destination.DestinationAddress, message, title, isImportant, isSilent);
-                    return notify.Send();
+                    result = notify.Send();
                 }
                 else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Telegram)
                 {
                     notify = new NotificationTelegram(destination.DestinationAddress, message, title, isImportant, isSilent);
-                    return notify.Send();
+                    result = notify.Send();
                 }
                 else if(destination.NotifyProvider == HMNotifyDestination.NotifyProviderType.Email)
                 {
@@ -432,18 +434,24 @@ namespace TRoschinsky.Service.HomeMaticNotification
                     ((NotificationSmtp)notify).SmtpConfig = mailConfig;
                     ((NotificationSmtp)notify).Link = pushLink;
                     ((NotificationSmtp)notify).Source = destination.Name;
-                    return notify.Send();
+                    result = notify.Send();
                 }
                 else
                 {
                     throw new HMNException("There was no notify-provider defined in destination.", null);
                 }
+
+                if(notify != null)
+                {
+                    log.AddRange(notify.Log);
+                }
             }
             catch(Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to send notification.", this.GetType().Name, ex));
             }
-            return false;
+
+            return result;
         }
 
 #region Helper
@@ -463,7 +471,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch(Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to connect to Homematic CCU.", this.GetType().Name, ex));
             }
             return false;
         }
@@ -632,7 +640,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                                                 }
                                                                 catch(Exception ex)
                                                                 {
-                                                                    errors.Add(ex);
+                                                                    log.Add(new Common.JournalEntry("Failed to process config @ HMNotifySilence.", this.GetType().Name, ex));
                                                                 }
                                                             }
                                                         }
@@ -666,7 +674,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                                                 }
                                                                 catch (Exception ex)
                                                                 {
-                                                                    errors.Add(ex);
+                                                                    log.Add(new Common.JournalEntry("Failed to process config @ HMNotifyCondition.", this.GetType().Name, ex));
                                                                 }                                                                
                                                             }
                                                         }
@@ -680,7 +688,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
                                             }
                                             catch (Exception ex)
                                             {
-                                                errors.Add(ex);
+                                                log.Add(new Common.JournalEntry("Failed to process config @ HMNotifyItem.", this.GetType().Name, ex));
                                             }
                                         }
                                     }
@@ -690,14 +698,14 @@ namespace TRoschinsky.Service.HomeMaticNotification
                         }
                         catch (Exception ex)
                         {
-                            errors.Add(ex);
+                            log.Add(new Common.JournalEntry("Failed to process config @ HMNotifyDestination.", this.GetType().Name, ex));
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to get config root node (configHMNotifier).", this.GetType().Name, ex));
             }
 
             return new Tuple<List<HMNotifyDestination>, List<HMNotifyItem>>(hmNotifyDestinations, hmNotifyItems);
@@ -746,7 +754,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch(Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to load config XML.", this.GetType().Name, ex));
             }
 
             return null;
@@ -756,10 +764,10 @@ namespace TRoschinsky.Service.HomeMaticNotification
         /// Get items currently written to local error log and deletes them
         /// </summary>
         /// <returns>Array of exceptions</returns>
-        public Exception[] GetRecentErrors()
+        public JournalEntry[] GetRecentErrors()
         {
-            Exception[] recentErrors = errors.ToArray();
-            errors.Clear();
+            JournalEntry[] recentErrors = log.ToArray();
+            log.Clear();
             return recentErrors;
         }
 
@@ -779,7 +787,7 @@ namespace TRoschinsky.Service.HomeMaticNotification
             }
             catch (Exception ex)
             {
-                errors.Add(ex);
+                log.Add(new Common.JournalEntry("Failed to clean up.", this.GetType().Name, ex));
             }
         }
     }
