@@ -195,17 +195,17 @@ namespace SVC_HomeMaticNotification
                     JournalEntry[] log = notifier.GetRecentErrors();
                     if (log != null && log.Length > 0)
                     {
-                        EventLog.WriteEntry(eventLogSource, "Some errors occured while query timer fired...", EventLogEntryType.Warning);
                         foreach (JournalEntry entry in log)
                         {
                             try
                             {
                                 switch (entry.EntryType)
                                 {
+#if DEBUG
                                     case "INF":
                                         EventLog.WriteEntry(eventLogSource, entry.ToString(), EventLogEntryType.Information);
                                         break;
-
+#endif
                                     case "WRN":
                                         EventLog.WriteEntry(eventLogSource, entry.ToString(), EventLogEntryType.Warning);
                                         break;
