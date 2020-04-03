@@ -517,18 +517,21 @@ namespace TRoschinsky.Service.HomeMaticNotification
                             {
                                 if (!String.IsNullOrWhiteSpace(itemNode.InnerText) || itemNode.HasChildNodes)
                                 {
+                                    // deprecated but still in place due to compatibility reasons
                                     if (itemNode.Name == "pushalotApiKey")
                                     {
                                         hmNotifyDest.DestinationAddress = itemNode.InnerText;
                                         hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushalot;
                                         hmNotifyDestinations.Add(hmNotifyDest);
                                     }
+                                    // deprecated but still in place due to compatibility reasons
                                     if (itemNode.Name == "pushoverApiKey")
                                     {
                                         hmNotifyDest.DestinationAddress = itemNode.InnerText;
                                         hmNotifyDest.NotifyProvider = HMNotifyDestination.NotifyProviderType.Pushover;
                                         hmNotifyDestinations.Add(hmNotifyDest);
                                     }
+                                    // current idea of configuring the notification target
                                     if (itemNode.Name == "notifyBy")
                                     {
                                         string pushProvider = itemNode.Attributes["NotifyProvider"].Value;
